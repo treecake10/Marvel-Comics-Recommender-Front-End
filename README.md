@@ -1,1 +1,1 @@
-![Screenshot (43)](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/bf8a8a8a-89e0-4d95-b77a-80e564729a97)
+![Screenshot (44)](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/3864ece1-56d3-4088-b533-d8d165241687)
