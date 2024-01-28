@@ -8,25 +8,69 @@ const getHash = (ts, secretKey, publicKey) => {
 
 const fetchComicEvents = async () => {
 
-    let eventUrl = `${API_URL}/v1/public/events`
+  let eventUrl = `${API_URL}/v1/public/events`
 
-    let timeStamp = Date.now().toString()
-    let apiKey = process.env.REACT_APP_API_KEY
-    let privateKey = process.env.REACT_APP_PRIVATE_KEY
-    let hash = getHash(timeStamp, privateKey, apiKey)
+  let timeStamp = Date.now().toString()
+  let apiKey = process.env.REACT_APP_API_KEY
+  let privateKey = process.env.REACT_APP_PRIVATE_KEY
+  let hash = getHash(timeStamp, privateKey, apiKey)
 
-    let url = `${eventUrl}?apikey=${apiKey}&ts=${timeStamp}&hash=${hash}`
+  const availableEventIds = [320, 227, 303, 330, 240, 302, 255, 151, 270, 219, 316, 306]
+  const numRandomEvents = 9;
+
+  const eventsData = [];
+
+  const shuffledEventIds = [...availableEventIds].sort(() => 0.5 - Math.random());
+
+  for (let i = 0; i < Math.min(numRandomEvents, shuffledEventIds.length); i++) {
+
+    const eventId = shuffledEventIds[i];
+
+    const params = new URLSearchParams({
+      apikey: apiKey,
+      ts: timeStamp,
+      hash: hash,
+    });
+
+    const url = `${eventUrl}/${eventId}?${params.toString()}`;
 
     try {
-        let response = await fetch(url)
-        let data = await response.json()
-        return data
-    } catch (err) {
-        console.error(err)
-        return
-    }
+      const response = await fetch(url);
+      const data = await response.json();
 
+      if (data.data && data.data.results) {
+        eventsData.push(data.data.results[0]);
+      }
+    } catch (error) {
+      console.error(`Error fetching data for event ID ${eventId}:`, error);
+    }
     
+  }
+
+  return eventsData 
+
 };
 
-export {fetchComicEvents};
+const fetchHeroesByName = async (name) => {
+  let heroUrl = `${API_URL}/v1/public/characters`;
+
+  let timeStamp = Date.now().toString()
+  let apiKey = process.env.REACT_APP_API_KEY
+  let privateKey = process.env.REACT_APP_PRIVATE_KEY
+  let hash = getHash(timeStamp, privateKey, apiKey)
+
+  let url = `${heroUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&nameStartsWith=${name}`;
+
+  try {
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log(data.data.results);
+    return data.data.results;
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+
+};
+
+export {fetchComicEvents, fetchHeroesByName};

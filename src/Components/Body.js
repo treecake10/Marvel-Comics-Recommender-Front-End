@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { fetchComicEvents } from "../utils/utils";
+import GridLoader from "react-spinners/GridLoader";
 
 const Body = () => {
 
     const [comicEventData, setComicEventData] = useState([]);
-    const [randomArrItems, setRandomArrItems] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
 
@@ -13,9 +14,10 @@ const Body = () => {
             try {
                 const eventData = await fetchComicEvents();
                 setComicEventData(eventData); 
-                console.log(comicEventData);
             } catch (error) {
                 console.error('Error fetching data:', error);
+            } finally {
+                setLoading(false);
             }
 
         };
@@ -24,17 +26,6 @@ const Body = () => {
 
     }, []);
 
-    useEffect(() => {
-        
-        if (comicEventData && comicEventData.data && comicEventData.data.results) {
-            const items = comicEventData.data.results;
-            const shuffledArr = items.sort(() => 0.5 - Math.random());
-            setRandomArrItems(shuffledArr.slice(0, 9));
-        }
-        
-    }, [comicEventData]);
-
-    
     return(
 
         <div className="body">
@@ -44,15 +35,26 @@ const Body = () => {
                 <button type="button">Get Started</button>
             </div>
             <div className="col">
-                {randomArrItems.map((item, index) => (
-                    <div key={index} className="card">
-                        <img src={`${item.thumbnail.path}.${item.thumbnail.extension}`} alt={`Image ${index}`} />
+                {loading? (
+                    <div className="loading-container">
+                    <GridLoader
+                        color={'#F0131E'}
+                        loading={loading}
+                        size={60}
+                        aria-label="Loading Grid"
+                        data-testid="loader"
+                    />
                     </div>
-                ))}
+                ) : (
+                    comicEventData.map((item, index) => (
+                        <div key={index} className="card">
+                            <img src={`${item.thumbnail.path}.${item.thumbnail.extension}`} alt={`Image ${index}`} />
+                        </div>
+                    ))
+                )}
             </div>
-        </div>
-        
-    )
+        </div> 
+    );
 }
 
 export default Body;
