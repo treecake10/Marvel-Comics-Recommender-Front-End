@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Header from "../Components/Header";
 import { fetchComicEvents } from "../utils/utils";
 import GridLoader from "react-spinners/GridLoader";
 
@@ -29,33 +28,32 @@ const Home = () => {
     
     return(
         <div className="home">
-            <Header/>
             <div className="body">
-            <div className="col">
-                <h2>Comics Just For You</h2>
-                <p>Sign in or create an account. Select your favorite characters, comics, series, events, and creators.<br/><br/>Get a recommended reading list tailored to your interests! </p>
-                <button type="button">Get Started</button>
-            </div>
-            <div className="col">
-                {loading? (
-                    <div className="loading-container">
-                    <GridLoader
-                        color={'#F0131E'}
-                        loading={loading}
-                        size={60}
-                        aria-label="Loading Grid"
-                        data-testid="loader"
-                    />
-                    </div>
-                ) : (
-                    comicEventData.map((item, index) => (
-                        <div key={index} className="card">
-                            <img src={`${item.thumbnail.path}.${item.thumbnail.extension}`} alt={`Image ${index}`} />
+                <div className="col">
+                    <h2>Comics Just For You</h2>
+                    <p>Sign in or create an account. Select your favorite characters, comics, series, events, and creators.<br/><br/>Get a recommended reading list tailored to your interests! </p>
+                    <button type="button">Get Started</button>
+                </div>
+                <div className="col">
+                    {loading? (
+                        <div className="loading-container">
+                        <GridLoader
+                            color={'#F0131E'}
+                            loading={loading}
+                            size={60}
+                            aria-label="Loading Grid"
+                            data-testid="loader"
+                        />
                         </div>
-                    ))
-                )}
+                    ) : (
+                        comicEventData.map((item, index) => (
+                            <div key={index} className="card">
+                                <img src={`${item.thumbnail.path}.${item.thumbnail.extension}`} alt={`Image ${index}`} />
+                            </div>
+                        ))
+                    )}
+                </div>
             </div>
-        </div>
         </div>
     )
 }

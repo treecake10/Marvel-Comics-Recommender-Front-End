@@ -10,7 +10,8 @@
   height: 100%;
   min-height: 100vh;
   background-color: black;
-  
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 /** Header **/
@@ -75,7 +76,7 @@
   cursor: pointer;
 }
 
-/** Body of the Landing page**/
+/** Body of the Landing page **/
 
 .body{
   display: flex;
@@ -149,4 +150,11 @@
 .loading-container {
   display: flex;
   justify-content: center;
+}
+
+/** Footer **/
+
+.footer {
+  background-color: black;
+  text-align: center;
 }

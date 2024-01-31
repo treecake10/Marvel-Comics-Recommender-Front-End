@@ -52,10 +52,6 @@ input {
   gap: 0.3rem;
 }
 
-.exp-component {
-  height: 100%;
-}
-
 .tabs-container{
   display: flex;
   justify-content: center;

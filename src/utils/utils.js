@@ -55,15 +55,37 @@ const fetchComicEvents = async () => {
 
 };
 
-const fetchHeroesByName = async (name) => {
-  let heroUrl = `${API_URL}/v1/public/characters`;
+const fetchCharacterByName = async (name) => {
+  let characterUrl = `${API_URL}/v1/public/characters`;
 
   let timeStamp = Date.now().toString()
   let apiKey = process.env.REACT_APP_API_KEY
   let privateKey = process.env.REACT_APP_PRIVATE_KEY
   let hash = getHash(timeStamp, privateKey, apiKey)
 
-  let url = `${heroUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&nameStartsWith=${name}`;
+  let url = `${characterUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&nameStartsWith=${name}`;
+
+  try {
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log(data.data.results);
+    return data.data.results;
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+
+};
+
+const fetchCharacterById = async (id) => {
+  let characterUrl = `${API_URL}/v1/public/characters/${id}`;
+
+  let timeStamp = Date.now().toString()
+  let apiKey = process.env.REACT_APP_API_KEY
+  let privateKey = process.env.REACT_APP_PRIVATE_KEY
+  let hash = getHash(timeStamp, privateKey, apiKey)
+
+  let url = `${characterUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}`;
 
   try {
     let response = await fetch(url);
@@ -99,4 +121,9 @@ const fetchCreatorsByName = async (name) => {
 
 };
 
-export {fetchComicEvents, fetchHeroesByName, fetchCreatorsByName};
+export {
+    fetchComicEvents, 
+    fetchCharacterByName, 
+    fetchCharacterById, 
+    fetchCreatorsByName
+};
