@@ -5,10 +5,10 @@ const Card = ({id, thumbnail, name}) => {
 
     return(
         <Link to={`/${id}`} target="_blank">
-            <div className="card">
+            <div className="result">
                 <img src={thumbnail} alt="thumbnail" />
-                <h1 className="card-name">{name}</h1>
-            </div>
+                <h3 className="card-name">{name}</h3>
+            </div>  
         </Link>
     )
 }

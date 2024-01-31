@@ -11,9 +11,10 @@ form input {
   padding: 0.5rem;
   font-size: 1rem;
   font-family: inherit;
-  border: 2px solid rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+  border: 0px solid rgba(0, 0, 0, 0.2);
   border-radius: 0.3rem;
-  color: white;
+  color: black;
 }
 
 button {
@@ -25,10 +26,11 @@ button {
   cursor: pointer;
   border-radius: 0.3rem;
   border: none;
+  margin: 0rem auto;
 }
  
 input {
-  background-color: transparent;
+  background-color: #ccc;
   border: none;
   height: 100%;
   font-size: 1.25rem;
@@ -40,7 +42,7 @@ input {
   width: min(90%, 45rem);
   margin: 0rem auto;
   margin-top: 5vh;
-  padding-left: 6.5vw;
+  padding-left: 2vw;
 }
 
 .grid-component {
@@ -53,5 +55,28 @@ input {
 .exp-component {
   height: 100%;
 }
+
+.tabs-container{
+  display: flex;
+  justify-content: center;
+  color: #F0131E;
+  
+}
+
+.tabs__label {
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.tabs__radio {
+  display: none;
+}
+
+.active-tab {
+  font-weight: bold;
+  color: white;
+  border-bottom: 2px solid white;
+}
+
   
   

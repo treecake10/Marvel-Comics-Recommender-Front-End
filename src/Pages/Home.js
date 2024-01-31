@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import Header from "../Components/Header";
 import { fetchComicEvents } from "../utils/utils";
 import GridLoader from "react-spinners/GridLoader";
 
-const Body = () => {
+const Home = () => {
 
     const [comicEventData, setComicEventData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -25,13 +26,14 @@ const Body = () => {
         fetchData();
 
     }, []);
-
+    
     return(
-
-        <div className="body">
+        <div className="home">
+            <Header/>
+            <div className="body">
             <div className="col">
                 <h2>Comics Just For You</h2>
-                <p>Sign in or create an account. Select your favorite characters, movies, or comic series.<br/>Get a recommended reading list tailored to your interests! </p>
+                <p>Sign in or create an account. Select your favorite characters, comics, series, events, and creators.<br/><br/>Get a recommended reading list tailored to your interests! </p>
                 <button type="button">Get Started</button>
             </div>
             <div className="col">
@@ -53,8 +55,8 @@ const Body = () => {
                     ))
                 )}
             </div>
-        </div> 
-    );
+        </div>
+        </div>
+    )
 }
-
-export default Body;
+export default Home;

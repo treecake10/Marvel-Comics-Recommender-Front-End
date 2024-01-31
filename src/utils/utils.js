@@ -1,4 +1,5 @@
 import MD5 from 'crypto-js/md5'
+import availableEventIds from '../eventList.json'
 
 const API_URL = process.env.REACT_APP_BASE_URL;
 
@@ -15,16 +16,19 @@ const fetchComicEvents = async () => {
   let privateKey = process.env.REACT_APP_PRIVATE_KEY
   let hash = getHash(timeStamp, privateKey, apiKey)
 
-  const availableEventIds = [320, 227, 303, 330, 240, 302, 255, 151, 270, 219, 316, 306]
+  console.log(timeStamp);
+  console.log(hash);
+
   const numRandomEvents = 9;
 
   const eventsData = [];
 
   const shuffledEventIds = [...availableEventIds].sort(() => 0.5 - Math.random());
+  const selectedEventIds = shuffledEventIds.slice(0, Math.min(numRandomEvents, shuffledEventIds.length));
 
-  for (let i = 0; i < Math.min(numRandomEvents, shuffledEventIds.length); i++) {
+  for (let i = 0; i < Math.min(numRandomEvents, selectedEventIds.length); i++) {
 
-    const eventId = shuffledEventIds[i];
+    const eventId = selectedEventIds[i].value;
 
     const params = new URLSearchParams({
       apikey: apiKey,
@@ -73,4 +77,26 @@ const fetchHeroesByName = async (name) => {
 
 };
 
-export {fetchComicEvents, fetchHeroesByName};
+const fetchCreatorsByName = async (name) => {
+  let creatorUrl = `${API_URL}/v1/public/creators`;
+
+  let timeStamp = Date.now().toString()
+  let apiKey = process.env.REACT_APP_API_KEY
+  let privateKey = process.env.REACT_APP_PRIVATE_KEY
+  let hash = getHash(timeStamp, privateKey, apiKey)
+
+  let url = `${creatorUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&nameStartsWith=${name}`;
+
+  try {
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log(data.data.results);
+    return data.data.results;
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+
+};
+
+export {fetchComicEvents, fetchHeroesByName, fetchCreatorsByName};

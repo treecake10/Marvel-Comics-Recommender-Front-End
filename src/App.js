@@ -1,6 +1,6 @@
 import './App.css';
-import Home from './Components/Home';
-import Explore from './Components/Explore';
+import Home from './Pages/Home';
+import Explore from './Pages/Explore';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 const App = () => {
