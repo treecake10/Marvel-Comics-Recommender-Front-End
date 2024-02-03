@@ -2,8 +2,10 @@ This is a web application employing the Marvel API in which a user can create th
 
 <br />
 ![Landing](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/ada2dfb0-3755-471e-ab02-e07e57fd1ea7)
+
 <br />
 ![CharacterSearch](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/2bb86d18-e82b-4ed3-98df-2eb65fa54bf7)
+
 <br />
 ![CharacterSearch2](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/1e5810c4-d4e3-4822-a65d-2b32a27a6269)
 <br />
