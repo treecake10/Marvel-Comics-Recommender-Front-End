@@ -1,0 +1,19 @@
+.icon-components-creator-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.name-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.character__right-creator {
+    display: flex;
+}
+
+.column-space {
+    width: 3vw; 
+}

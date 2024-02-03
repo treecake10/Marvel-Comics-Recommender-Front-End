@@ -74,5 +74,13 @@ input {
   border-bottom: 2px solid white;
 }
 
+.loading-container {
+  margin-top: 1vh;
+  margin-right: 2vw;
+  position: relative;
+}
+
+
+
   
   

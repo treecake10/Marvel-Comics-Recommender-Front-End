@@ -5,21 +5,25 @@
 }
 
 .container.large {
-    width: min(90%, 72rem);
+    width: min(90%, 100%);
     margin-left: 0.75%;
 }
 
 .character__details-container {
     display: flex;
     gap: 2rem;
-    flex-wrap: wrap;
     line-height: 1.6;
 }
 
-.character__details-container img {
+.character__left {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.character__left img {
     max-width: 100%;
-    max-height: 36rem;
+    max-height: 100%;
 }
 
 .character__details {
@@ -32,3 +36,50 @@
     list-style: disc;
     margin-left: 1.5rem;
 }
+
+.character__series {
+    color: white;
+    width:25vw; 
+}
+
+.character__right {
+    display: flex;
+}
+
+.column-spacing {
+    width: 5vw; 
+}
+
+.like-button {
+    background: transparent;
+    border: solid;
+    font-size: 24px; 
+    color: white;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.icon-container {
+    color: white;
+}
+
+.icons {
+    font-size: 60px; 
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.icon-text {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+
+.icon-container.clickedHeart {
+    color: red;
+}
+
+.icon-container.clickedStar {
+    color: yellow;
+}
+

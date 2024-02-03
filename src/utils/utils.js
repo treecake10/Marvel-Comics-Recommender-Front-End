@@ -55,15 +55,16 @@ const fetchComicEvents = async () => {
 
 };
 
-const fetchCharacterByName = async (name) => {
+const fetchCharactersByName = async (name, offset) => {
   let characterUrl = `${API_URL}/v1/public/characters`;
 
   let timeStamp = Date.now().toString()
   let apiKey = process.env.REACT_APP_API_KEY
   let privateKey = process.env.REACT_APP_PRIVATE_KEY
+  let limit = 100
   let hash = getHash(timeStamp, privateKey, apiKey)
 
-  let url = `${characterUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&nameStartsWith=${name}`;
+  let url = `${characterUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&limit=${limit}&offset=${offset}&nameStartsWith=${name}`;
 
   try {
     let response = await fetch(url);
@@ -99,15 +100,107 @@ const fetchCharacterById = async (id) => {
 
 };
 
-const fetchCreatorsByName = async (name) => {
+const fetchSeriesByCharacterId = async (id, offset) => {
+  let seriesUrl = `${API_URL}/v1/public/characters/${id}/series`;
+
+  let timeStamp = Date.now().toString()
+  let apiKey = process.env.REACT_APP_API_KEY
+  let privateKey = process.env.REACT_APP_PRIVATE_KEY
+  let limit = 100
+  let hash = getHash(timeStamp, privateKey, apiKey)
+
+  let url = `${seriesUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&limit=${limit}&offset=${offset}`;
+
+  try {
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log(data.data.results);
+    return data.data.results;
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+
+};
+
+const fetchCreatorsByName = async (name, offset) => {
   let creatorUrl = `${API_URL}/v1/public/creators`;
+
+  let timeStamp = Date.now().toString()
+  let apiKey = process.env.REACT_APP_API_KEY
+  let privateKey = process.env.REACT_APP_PRIVATE_KEY
+  let limit = 100
+  let hash = getHash(timeStamp, privateKey, apiKey)
+
+  let url = `${creatorUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&limit=${limit}&offset=${offset}&nameStartsWith=${name}`;
+
+  try {
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log(data.data.results);
+    return data.data.results;
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+
+};
+
+const fetchCreatorById = async (id) => {
+  let creatorUrl = `${API_URL}/v1/public/creators/${id}`;
 
   let timeStamp = Date.now().toString()
   let apiKey = process.env.REACT_APP_API_KEY
   let privateKey = process.env.REACT_APP_PRIVATE_KEY
   let hash = getHash(timeStamp, privateKey, apiKey)
 
-  let url = `${creatorUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&nameStartsWith=${name}`;
+  let url = `${creatorUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}`;
+
+  try {
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log(data.data.results);
+    return data.data.results;
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+
+};
+
+const fetchSeriesByCreatorId = async (id, offset) => {
+  let storiesUrl = `${API_URL}/v1/public/creators/${id}/series`;
+
+  let timeStamp = Date.now().toString()
+  let apiKey = process.env.REACT_APP_API_KEY
+  let privateKey = process.env.REACT_APP_PRIVATE_KEY
+  let limit = 100
+  let hash = getHash(timeStamp, privateKey, apiKey)
+
+  let url = `${storiesUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&limit=${limit}&offset=${offset}`;
+
+  try {
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log(data.data.results);
+    return data.data.results;
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+
+};
+
+const fetchEventsByCreatorId = async (id, offset) => {
+  let eventsUrl = `${API_URL}/v1/public/creators/${id}/events`;
+
+  let timeStamp = Date.now().toString()
+  let apiKey = process.env.REACT_APP_API_KEY
+  let privateKey = process.env.REACT_APP_PRIVATE_KEY
+  let limit = 100
+  let hash = getHash(timeStamp, privateKey, apiKey)
+
+  let url = `${eventsUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&limit=${limit}&offset=${offset}`;
 
   try {
     let response = await fetch(url);
@@ -123,7 +216,11 @@ const fetchCreatorsByName = async (name) => {
 
 export {
     fetchComicEvents, 
-    fetchCharacterByName, 
+    fetchCharactersByName, 
     fetchCharacterById, 
-    fetchCreatorsByName
+    fetchSeriesByCharacterId,
+    fetchCreatorsByName,
+    fetchCreatorById,
+    fetchSeriesByCreatorId, 
+    fetchEventsByCreatorId
 };

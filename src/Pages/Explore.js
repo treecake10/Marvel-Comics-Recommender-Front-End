@@ -1,6 +1,8 @@
 import { useState } from "react";
 import React from "react";
-import { fetchCharacterByName, fetchCreatorsByName } from "../utils/utils";
+import ClipLoader from "react-spinners/ClipLoader";
+import { fetchCharactersByName, fetchCreatorsByName } from "../utils/utils";
+import DataSearchFetcher from "../Components/DataSearchFetcher";
 import Container from "../Components/Container";
 import Grid from "../Components/Grid";
 import Card from "../Components/Card";
@@ -16,128 +18,167 @@ const Explore = () => {
     const [creators, setCreators] = useState([]);
     const [error, setError] = useState();
     const [toggleState, setToggleState] = useState(1);
+    const [loading, setLoading] = useState(false);
 
     const toggleTab = (index) => {
         setToggleState(index);
     };
 
-
-    let characterCards;
-    let creatorCards;
-
     const handleCharacterClick = async (e, args) => {
-
         e.preventDefault();
-
-        if (args === "") return;
-
+        if (args === "") return [];
         try {
-            return await fetchCharacterByName(args);
-        } catch (err) {
-            return err;
+            setLoading(true);
+            const result = await DataSearchFetcher(fetchCharactersByName, args);
+            return result;
+        } catch (error) {
+            console.error(error);
+            setError(error);
+        } finally {
+            setLoading(false);
         }
-
+       
     };
-
+    
     const handleCreatorClick = async (e, args) => {
-
         e.preventDefault();
-
-        if (args === "") return;
-
+        if (args === "") return [];
         try {
-            return await fetchCreatorsByName(args);
-        } catch (err) {
-            return err;
+            setLoading(true);
+            const result = await DataSearchFetcher(fetchCreatorsByName, args);
+            return result;
+        } catch (error) {
+            console.error(error);
+            setError(error);
+        } finally {
+            setLoading(false);
         }
-
     };
 
-    if (characters) {
-        characterCards = characters.map((character) => (
-            <Card
-                name={character.name}
-                key={character.id}
-                id={character.id}
-                thumbnail={`${character.thumbnail.path}/${IMG_FANTASTIC}.${character.thumbnail.extension}`}
-            />
-        )); 
-    }
+    
+    const characterCards = characters.map(({ id, name, thumbnail }) => (
+        <Card
+            name={name}
+            key={id}
+            category={"character"}
+            id={id}
+            thumbnail={`${thumbnail.path}/${IMG_FANTASTIC}.${thumbnail.extension}`}
+        />
+    )); 
 
-    if (creators) {
-        creatorCards = creators.map((creator) => (
-            <Card
-                name={creator.fullName}
-                key={creator.id}
-                id={creator.id}
-                thumbnail={`${creator.thumbnail.path}/${IMG_FANTASTIC}.${creator.thumbnail.extension}`}
-            />
-        )); 
-    }
+
+
+    const creatorCards = creators.map(({ id, fullName, thumbnail }) => (
+        <Card
+            name={fullName}
+            key={id}
+            category={"creator"}
+            id={id}
+            thumbnail={`${thumbnail.path}/${IMG_FANTASTIC}.${thumbnail.extension}`}
+        />
+    )); 
+    
 
     return(
         <div className="home">
             <br />
             <div className="tabs-container">
-                <input type="radio" class="tabs__radio" name="tabs-example" id="tab1" onClick={() => toggleTab(1)}></input>
-                <label for="tab1" class={toggleState === 1 ? "tabs__label active-tab" : "tabs__label"}>Characters</label>
-                
-                <input type="radio" class="tabs__radio" name="tabs-example" id="tab2" onClick={() => toggleTab(2)}></input>
-                <label for="tab2" class={toggleState === 2 ? "tabs__label active-tab" : "tabs__label"}>Comics</label>
-
-                <input type="radio" class="tabs__radio" name="tabs-example" id="tab3" onClick={() => toggleTab(3)}></input>
-                <label for="tab3" class={toggleState === 3 ? "tabs__label active-tab" : "tabs__label"}>Series</label>
-
-                <input type="radio" class="tabs__radio" name="tabs-example" id="tab4" onClick={() => toggleTab(4)}></input>
-                <label for="tab4" class={toggleState === 4 ? "tabs__label active-tab" : "tabs__label"}>Events</label>
-
-                <input type="radio" class="tabs__radio" name="tabs-example" id="tab5" onClick={() => toggleTab(5)}></input>
-                <label for="tab5" class={toggleState === 5 ? "tabs__label active-tab" : "tabs__label"}>Creators</label>
-                
+                {[1, 2, 3, 4, 5].map((index) => (
+                    <React.Fragment key={index}>
+                        <input
+                            type="radio"
+                            className="tabs__radio"
+                            name="tabs-example"
+                            id={`tab${index}`}
+                            onClick={() => toggleTab(index)}
+                        ></input>
+                        <label
+                            htmlFor={`tab${index}`}
+                            className={
+                                toggleState === index ? "tabs__label active-tab" : "tabs__label"
+                            }
+                        >
+                            {index === 1 
+                                ? "Characters" 
+                                : index === 2 
+                                ? "Comics" 
+                                : index === 3 
+                                ? "Series" 
+                                : index === 4 
+                                ? "Events" 
+                                : index === 5 
+                                ? "Creators"
+                                : null
+                            }
+                        </label>
+                    </React.Fragment>
+                ))}
             </div>
 
-            <div class={toggleState === 1 ? "tabs__content" : null}>
+            <div className={toggleState === 1 ? "tabs__content" : null}>
                 {toggleState === 1 && ( 
-                    <SearchBar
-                        handleClick={handleCharacterClick}
-                        placeholder={"Search characters..."}
-                        setResults={setCharacters}
-                        setError={setError}
-                    />
-                )}
-                
-                {toggleState === 1 && ( 
-                    <Container>
-                        <Grid>
-                            {characterCards ? characterCards : null}
-                        </Grid>
-                    </Container>
+                    <React.Fragment>
+                        <SearchBar
+                            handleClick={handleCharacterClick}
+                            placeholder={"Search character or team..."}
+                            setResults={setCharacters}
+                            setError={setError}
+                        />
+
+                        <Container>
+                            <Grid>
+                            
+                            {loading ? (
+                                <div className="loading-container">
+                                    <ClipLoader
+                                        color={'#F0131E'}
+                                        loading={loading}
+                                        size={50}
+                                        aria-label="Loading Grid"
+                                        data-testid="loader"
+                                    />
+                                </div>
+                            ) : (
+                                characterCards
+                            )}
+
+                            </Grid>
+                        </Container>
+                    </React.Fragment>
                 )}  
             </div>
 
-            <div class={toggleState === 5 ? "tabs__content" : null}>
+            <div className={toggleState === 5 ? "tabs__content" : null}>
                 {toggleState === 5 && ( 
-                    <SearchBar
-                        handleClick={handleCreatorClick}
-                        placeholder={"Search creators..."}
-                        setResults={setCreators}
-                        setError={setError}
-                    />
-                )}
-
-
-                {toggleState === 5 && ( 
-                    <Container>
-                        <Grid>
-                            {creatorCards ? creatorCards : null}
-                        </Grid>
-                    </Container>
+                    <React.Fragment>
+                        <SearchBar
+                            handleClick={handleCreatorClick}
+                            placeholder={"Search creators..."}
+                            setResults={setCreators}
+                            setError={setError}
+                        />
+                        <Container>
+                            <Grid>
+                            {loading ? (
+                                <div className="loading-container">
+                                    <ClipLoader
+                                        color={'#F0131E'}
+                                        loading={loading}
+                                        size={50}
+                                        aria-label="Loading Grid"
+                                        data-testid="loader"
+                                    />
+                                </div>
+                            ) : (
+                                creatorCards
+                            )}
+                            </Grid>
+                        </Container>
+                    </React.Fragment>
                 )}
             </div>
-
             <br />
             <br/>
-
         </div>
     )
 }

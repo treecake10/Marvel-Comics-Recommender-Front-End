@@ -1,59 +1,58 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import { fetchCharacterById } from "../utils/utils";
+import Like from "../Components/Like";
+import Favorite from "../Components/Favorite";
 import "./CharacterDetails.css";
 
 const CharacterDetails = () => {
-    let { id } = useParams();
 
-    const [character, setCharacter] = useState();
+    const { id } = useParams();
 
-    let series;
+    const [character, setCharacter] = useState(null);
 
     useEffect(() => {
-        fetchCharacterById(id)
-        .then(data => setCharacter(data[0]))
-        .catch(err => console.log(err))
-    }, []);
+        const fetchCharacterDetails = async () => {
+            try {
+                const characterData = await fetchCharacterById(id);
+                setCharacter(characterData[0]);
+            } catch (error) {
+                console.error(error);
+            }
+        };
 
-    if (character) {
-        series = character.series.items;
-    }
+        fetchCharacterDetails();
 
-    if (!character) return
-    
+    }, [id]);
+
+    if (!character) return null;
+
     return (
         <div className="home">
             <div className="container large">
                 <div className="character__details-container">
                     <img src={`${character.thumbnail.path}.${character.thumbnail.extension}`} alt='character image full size' />
                     <div className="character__details">
-                        <h4>Name</h4>
+                        <br />
+                        <h2>Name</h2>
                         <p>{character.name}</p>
                         <br />
+                        <h2>Description</h2>
                         {character.description ? (
-                            <React.Fragment>
-                                <h4>Description</h4>
-                                <p>{character.description}</p>
-                            </React.Fragment>
-                        ) : null}
+                            <p>{character.description}</p>
+                        ) : <p>Not Found</p>}
                         <br />
-                        <div className='character__series'>
-                            <h4>Series</h4>
-                            <ul>
-                                {series
-                                  ? series.map((title) => (
-                                        <li key={Math.random() * 1000}>{title.name}</li>
-                                    ))
-                                  : null}
-                            </ul>
-                        </div>
-                        <br />
+                        
+                        <div className="character__right">
+                            <Like/>
+                            <div className="column-spacing"></div>
+                            <Favorite/>
+                        </div> 
                     </div>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default CharacterDetails;
