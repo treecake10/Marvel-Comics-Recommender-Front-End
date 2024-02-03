@@ -3,7 +3,6 @@ This is a web application employing the Marvel API in which a user can create th
 ## Homepage
 ![Landing](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/ada2dfb0-3755-471e-ab02-e07e57fd1ea7)
 
-
 ## Search Character or Team
 ![CharacterSearch](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/2bb86d18-e82b-4ed3-98df-2eb65fa54bf7)
 
@@ -20,5 +19,9 @@ This is a web application employing the Marvel API in which a user can create th
 ![CreatorSearch2](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/3f702972-cc07-4c70-84de-2d4b0f3c2fc1)
 
 ## Creator Page
-![CreatorPage](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/98625e8e-7bf8-4708-bfc1-60cf019200dc)
+![CreatorPagePt1](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/4ab8973e-35cc-4dfd-9db2-61f67e193319)
+
+## Creator Page
+![CreatorPagePt2](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/f49d7757-b7f8-49d0-9d1d-851a95e67ea9)
+
 
