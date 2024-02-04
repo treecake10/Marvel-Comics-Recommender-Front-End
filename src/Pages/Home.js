@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchComicEvents } from "../utils/utils";
+import { fetchComicEvents } from "../libs/utils";
 import GridLoader from "react-spinners/GridLoader";
 
 const Home = () => {

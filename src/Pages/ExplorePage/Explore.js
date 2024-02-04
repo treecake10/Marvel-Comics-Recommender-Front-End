@@ -1,13 +1,13 @@
 import { useState } from "react";
 import React from "react";
 import ClipLoader from "react-spinners/ClipLoader";
-import { fetchCharactersByName, fetchCreatorsByName } from "../utils/utils";
-import DataSearchFetcher from "../Components/DataSearchFetcher";
-import Container from "../Components/Container";
-import Grid from "../Components/Grid";
-import Card from "../Components/Card";
-import SearchBar from "../Components/SearchBar";
-import "../App.css";
+import { fetchCharactersByName, fetchCreatorsByName } from "../../libs/utils";
+import DataSearchFetcher from "../../Components/DataTools/DataSearchFetcher";
+import Container from "../../Components/CardsLayout/Container";
+import Grid from "../../Components/CardsLayout/Grid";
+import Card from "../../Components/CardsLayout/Card";
+import SearchBar from "../../Components/SearchBar";
+import "../../App.css";
 import "./Explore.css";
 
 const IMG_FANTASTIC = "portrait_fantastic";
@@ -151,6 +151,7 @@ const Explore = () => {
             <div className={toggleState === 5 ? "tabs__content" : null}>
                 {toggleState === 5 && ( 
                     <React.Fragment>
+                        <p className="creator-paragraph">Enter the complete first, last, or full name to find creators:</p>
                         <SearchBar
                             handleClick={handleCreatorClick}
                             placeholder={"Search creators..."}

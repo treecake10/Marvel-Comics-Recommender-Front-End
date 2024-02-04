@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
-import { fetchCreatorById, fetchSeriesByCreatorId, fetchEventsByCreatorId } from "../utils/utils";
-import ParallelDataFetcher from "../Components/ParallelDataFetcher";
-import DataList from "../Components/DataList";
-import Like from "../Components/Like";
-import Favorite from "../Components/Favorite";
+import { fetchCreatorById, fetchSeriesByCreatorId, fetchEventsByCreatorId } from "../../libs/utils";
+import ParallelDataFetcher from "../../Components/DataTools/ParallelDataFetcher";
+import DataList from "../../Components/DataList";
+import Like from "../../Components/Icons/Like";
+import Favorite from "../../Components/Icons/Favorite";
 import "./CreatorDetails.css";
 
 const CreatorDetails = () => {
@@ -62,27 +62,27 @@ const CreatorDetails = () => {
     return (
         <div className="home">
             <div className="container large">
-                <div className="character__details-container">
-                    <div className="character__left">
+                <div className="details-container">
+                    <div className="creator__left-side">
                         <img src={`${thumbnail?.path}.${thumbnail?.extension}`} alt='character image full size' />
-                        <div className="character__details">
+                        <div className="contents">
                             <br />
-                            <div className="name-container">
+                            <div className="creator__contents__arrangement">
                                 <h1>{fullName}</h1>
                             </div>
                             <br />
-                            <div className="icon-components-creator-container">
+                            <div className="creator__contents__arrangement">
                                 <Like />
-                                <div className="column-spacing"></div>
+                                <div className="middle-column-spacing"></div>
                                 <Favorite />
                             </div>
                         </div>
                     </div>
-                    <div className="character__right-creator">
-                        <div className="column-space"></div>
-                        <DataList array={series} listName={"Series"} loading={loadSeries} />
-                        <div className="column-spacing"></div>
-                        <DataList array={events} listName={"Events"} loading={loadEvents} />
+                    <div className="creator__right-side">
+                        <div className="creator__column-space"></div>
+                        <DataList array={series} listName={"Series"} listStyle={"creator__lists"} loading={loadSeries} />
+                        <div className="middle-column-spacing"></div>
+                        <DataList array={events} listName={"Events"} listStyle={"creator__lists"} loading={loadEvents} />
                     </div>
                 </div>
             </div>

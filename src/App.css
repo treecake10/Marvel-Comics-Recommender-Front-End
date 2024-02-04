@@ -158,3 +158,27 @@
   background-color: black;
   text-align: center;
 }
+
+
+/** Detail pages (Characters, Comics, Series, Events, and Creators) **/
+
+.container.large {
+  width: min(90%, 100%);
+  margin-left: 0.75%;
+}
+
+.details-container {
+  display: flex;
+  gap: 2rem;
+  line-height: 1.6;
+}
+
+.contents {
+  flex: 1;
+  min-width: 35ch;
+  color: white;
+}
+
+.middle-column-spacing {
+  width: 5vw; 
+}

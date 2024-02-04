@@ -1,9 +1,9 @@
 import React from 'react';
 import BarLoader from "react-spinners/BarLoader";
 
-const DataList = ({ array = [], listName, loading }) => {
+const DataList = ({ array = [], listName, listStyle, loading }) => {
     return (
-        <div className='character__series'>
+        <div className={listStyle}>
             <h2>{listName}</h2>
             <br />
             {loading ? (

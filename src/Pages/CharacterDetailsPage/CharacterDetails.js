@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
-import { fetchCharacterById } from "../utils/utils";
-import Like from "../Components/Like";
-import Favorite from "../Components/Favorite";
+import { fetchCharacterById } from "../../libs/utils";
+import Like from "../../Components/Icons/Like";
+import Favorite from "../../Components/Icons/Favorite";
 import "./CharacterDetails.css";
 
 const CharacterDetails = () => {
@@ -30,9 +30,9 @@ const CharacterDetails = () => {
     return (
         <div className="home">
             <div className="container large">
-                <div className="character__details-container">
+                <div className="details-container">
                     <img src={`${character.thumbnail.path}.${character.thumbnail.extension}`} alt='character image full size' />
-                    <div className="character__details">
+                    <div className="contents">
                         <br />
                         <h2>Name</h2>
                         <p>{character.name}</p>
@@ -43,9 +43,9 @@ const CharacterDetails = () => {
                         ) : <p>Not Found</p>}
                         <br />
                         
-                        <div className="character__right">
+                        <div className="character__right-side">
                             <Like/>
-                            <div className="column-spacing"></div>
+                            <div className="middle-column-spacing"></div>
                             <Favorite/>
                         </div> 
                     </div>
