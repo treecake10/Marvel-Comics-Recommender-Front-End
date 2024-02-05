@@ -7,13 +7,10 @@ const privateKey = process.env.REACT_APP_PRIVATE_KEY;
 
 const getHash = (ts) => MD5(ts + privateKey + apiKey).toString();
 
-const fetchComicEvents = async () => {
+const fetchHomepageComicEvents = async () => {
   const eventUrl = `${API_URL}/v1/public/events`;
   const timeStamp = Date.now().toString();
   const hash = getHash(timeStamp, privateKey, apiKey);
-
-  console.log(timeStamp);
-  console.log(hash);
 
   const numRandomEvents = 9;
 
@@ -59,7 +56,7 @@ const fetchCharactersByName = async (name, offset) => {
   try {
     let response = await fetch(url);
     let data = await response.json();
-    console.log(data.data.results);
+    //console.log(data.data.results);
     return data.data.results;
   } catch (err) {
     console.error(err);
@@ -79,7 +76,6 @@ const fetchCharacterById = async (id) => {
   try {
     let response = await fetch(url);
     let data = await response.json();
-    console.log(data.data.results);
     return data.data.results;
   } catch (err) {
     console.error(err);
@@ -100,7 +96,6 @@ const fetchSeriesByCharacterId = async (id, offset) => {
   try {
     let response = await fetch(url);
     let data = await response.json();
-    console.log(data.data.results);
     return data.data.results;
   } catch (err) {
     console.error(err);
@@ -121,7 +116,6 @@ const fetchCreatorsByName = async (name, offset) => {
   try {
     let response = await fetch(url);
     let data = await response.json();
-    console.log(data.data.results);
     return data.data.results;
   } catch (err) {
     console.error(err);
@@ -141,7 +135,6 @@ const fetchCreatorById = async (id) => {
   try {
     let response = await fetch(url);
     let data = await response.json();
-    console.log(data.data.results);
     return data.data.results;
   } catch (err) {
     console.error(err);
@@ -162,7 +155,6 @@ const fetchSeriesByCreatorId = async (id, offset) => {
   try {
     let response = await fetch(url);
     let data = await response.json();
-    console.log(data.data.results);
     return data.data.results;
   } catch (err) {
     console.error(err);
@@ -183,7 +175,125 @@ const fetchEventsByCreatorId = async (id, offset) => {
   try {
     let response = await fetch(url);
     let data = await response.json();
-    console.log(data.data.results);
+    return data.data.results;
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+
+};
+
+const fetchSeriesByTitle = async (title, offset) => {
+  let seriesUrl = `${API_URL}/v1/public/series`;
+
+  let timeStamp = Date.now().toString()
+  let limit = 100
+  let hash = getHash(timeStamp, privateKey, apiKey)
+
+  let url = `${seriesUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&limit=${limit}&offset=${offset}&titleStartsWith=${title}`;
+
+  try {
+    let response = await fetch(url);
+    let data = await response.json();
+    return data.data.results;
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+
+};
+
+const fetchSeriesById = async (id) => {
+  let seriesUrl = `${API_URL}/v1/public/series/${id}`;
+
+  let timeStamp = Date.now().toString()
+  let hash = getHash(timeStamp, privateKey, apiKey)
+
+  let url = `${seriesUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}`;
+
+  try {
+    let response = await fetch(url);
+    let data = await response.json();
+    return data.data.results;
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+
+};
+
+const fetchComicsBySeriesId = async (id, offset) => {
+  let comicsUrl = `${API_URL}/v1/public/series/${id}/comics`;
+
+  let timeStamp = Date.now().toString()
+  let limit = 100
+  let hash = getHash(timeStamp, privateKey, apiKey)
+
+  let url = `${comicsUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&limit=${limit}&offset=${offset}`;
+
+  try {
+    let response = await fetch(url);
+    let data = await response.json();
+    return data.data.results;
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+
+}
+
+const fetchCharactersBySeriesId = async (id, offset) => {
+  let charactersUrl = `${API_URL}/v1/public/series/${id}/characters`;
+
+  let timeStamp = Date.now().toString()
+  let limit = 100
+  let hash = getHash(timeStamp, privateKey, apiKey)
+
+  let url = `${charactersUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&limit=${limit}&offset=${offset}`;
+
+  try {
+    let response = await fetch(url);
+    let data = await response.json();
+    return data.data.results;
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+
+}
+
+const fetchEventsBySeriesId = async (id, offset) => {
+  let eventsUrl = `${API_URL}/v1/public/series/${id}/events`;
+
+  let timeStamp = Date.now().toString()
+  let limit = 100
+  let hash = getHash(timeStamp, privateKey, apiKey)
+
+  let url = `${eventsUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&limit=${limit}&offset=${offset}`;
+
+  try {
+    let response = await fetch(url);
+    let data = await response.json();
+    return data.data.results;
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+
+};
+
+const fetchCreatorsBySeriesId = async (id, offset) => {
+  let creatorsUrl = `${API_URL}/v1/public/series/${id}/creators`;
+
+  let timeStamp = Date.now().toString()
+  let limit = 100
+  let hash = getHash(timeStamp, privateKey, apiKey)
+
+  let url = `${creatorsUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&limit=${limit}&offset=${offset}`;
+
+  try {
+    let response = await fetch(url);
+    let data = await response.json();
     return data.data.results;
   } catch (err) {
     console.error(err);
@@ -193,12 +303,18 @@ const fetchEventsByCreatorId = async (id, offset) => {
 };
 
 export {
-    fetchComicEvents, 
+    fetchHomepageComicEvents, 
     fetchCharactersByName, 
     fetchCharacterById, 
     fetchSeriesByCharacterId,
     fetchCreatorsByName,
     fetchCreatorById,
     fetchSeriesByCreatorId, 
-    fetchEventsByCreatorId
+    fetchEventsByCreatorId,
+    fetchSeriesByTitle,
+    fetchSeriesById,
+    fetchComicsBySeriesId,
+    fetchCharactersBySeriesId,
+    fetchEventsBySeriesId,
+    fetchCreatorsBySeriesId
 };

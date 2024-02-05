@@ -1,8 +1,9 @@
 import './App.css';
 import Home from './Pages/Home';
 import Explore from './Pages/ExplorePage/Explore';
-import CharacterDetails from './Pages/CharacterDetailsPage/CharacterDetails';
-import CreatorDetails from './Pages/CreatorDetailsPage/CreatorDetails';
+import CharacterDetails from './Pages/CharacterDetails';
+import SeriesDetails from './Pages/SeriesDetails';
+import CreatorDetails from './Pages/CreatorDetails';
 import Header from './Components/Header'
 import Footer from './Components/Footer';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/character/:id" element={<CharacterDetails />} />
+          <Route path="/series/:id" element={<SeriesDetails />} />
           <Route path="/creator/:id" element={<CreatorDetails />} />
         </Routes>
         <Footer />

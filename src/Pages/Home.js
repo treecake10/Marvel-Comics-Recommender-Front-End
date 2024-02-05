@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchComicEvents } from "../libs/utils";
+import { fetchHomepageComicEvents } from "../libs/utils";
 import GridLoader from "react-spinners/GridLoader";
 
 const Home = () => {
@@ -12,7 +12,7 @@ const Home = () => {
         const fetchData = async () => {
 
             try {
-                const eventData = await fetchComicEvents();
+                const eventData = await fetchHomepageComicEvents();
                 setComicEventData(eventData); 
             } catch (error) {
                 console.error('Error fetching data:', error);

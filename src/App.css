@@ -159,12 +159,39 @@
   text-align: center;
 }
 
+/** Icons **/
+
+.icon-container {
+  color: white;
+}
+
+.icons {
+  font-size: 60px; 
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.icon-text {
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+}
+
+.icon-container.clickedHeart {
+  color: red;
+}
+
+.icon-container.clickedStar {
+  color: yellow;
+}
+
 
 /** Detail pages (Characters, Comics, Series, Events, and Creators) **/
 
 .container.large {
-  width: min(90%, 100%);
+  width: 98%;
   margin-left: 0.75%;
+  margin: 1rem auto;
 }
 
 .details-container {
@@ -173,12 +200,40 @@
   line-height: 1.6;
 }
 
+.left-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.right-side {
+  display: flex;
+}
+
 .contents {
   flex: 1;
   min-width: 35ch;
   color: white;
 }
 
-.middle-column-spacing {
-  width: 5vw; 
+.contents__arrangement {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+.column-space {
+  width: 3vw; 
+}
+
+.middle-column-spacing {
+  width: 2vw; 
+}
+
+/** DataList component **/
+
+.lists{
+  color: white;
+  width: auto; 
+}
+

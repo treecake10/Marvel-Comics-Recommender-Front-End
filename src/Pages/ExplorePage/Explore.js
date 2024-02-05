@@ -1,7 +1,7 @@
 import { useState } from "react";
 import React from "react";
 import ClipLoader from "react-spinners/ClipLoader";
-import { fetchCharactersByName, fetchCreatorsByName } from "../../libs/utils";
+import { fetchCharactersByName, fetchCreatorsByName, fetchSeriesByTitle } from "../../libs/utils";
 import DataSearchFetcher from "../../Components/DataTools/DataSearchFetcher";
 import Container from "../../Components/CardsLayout/Container";
 import Grid from "../../Components/CardsLayout/Grid";
@@ -15,6 +15,7 @@ const IMG_FANTASTIC = "portrait_fantastic";
 const Explore = () => {
 
     const [characters, setCharacters] = useState([]);
+    const [series, setSeries] = useState([]);
     const [creators, setCreators] = useState([]);
     const [error, setError] = useState();
     const [toggleState, setToggleState] = useState(1);
@@ -30,6 +31,22 @@ const Explore = () => {
         try {
             setLoading(true);
             const result = await DataSearchFetcher(fetchCharactersByName, args);
+            return result;
+        } catch (error) {
+            console.error(error);
+            setError(error);
+        } finally {
+            setLoading(false);
+        }
+       
+    };
+
+    const handleSeriesClick = async (e, args) => {
+        e.preventDefault();
+        if (args === "") return [];
+        try {
+            setLoading(true);
+            const result = await DataSearchFetcher(fetchSeriesByTitle, args);
             return result;
         } catch (error) {
             console.error(error);
@@ -66,7 +83,15 @@ const Explore = () => {
         />
     )); 
 
-
+    const seriesCards = series.map(({ id, title, thumbnail }) => (
+        <Card
+            name={title}
+            key={id}
+            category={"series"}
+            id={id}
+            thumbnail={`${thumbnail.path}/${IMG_FANTASTIC}.${thumbnail.extension}`}
+        />
+    )); 
 
     const creatorCards = creators.map(({ id, fullName, thumbnail }) => (
         <Card
@@ -140,6 +165,40 @@ const Explore = () => {
                                 </div>
                             ) : (
                                 characterCards
+                            )}
+
+                            </Grid>
+                        </Container>
+                    </React.Fragment>
+                )}  
+            </div>
+
+            <div className={toggleState === 3 ? "tabs__content" : null}>
+                {toggleState === 3 && ( 
+                    <React.Fragment>
+                        <p className="creator-paragraph">Enter the complete name of the title to find a comic series:</p>
+                        <SearchBar
+                            handleClick={handleSeriesClick}
+                            placeholder={"Search a comic series..."}
+                            setResults={setSeries}
+                            setError={setError}
+                        />
+
+                        <Container>
+                            <Grid>
+                            
+                            {loading ? (
+                                <div className="loading-container">
+                                    <ClipLoader
+                                        color={'#F0131E'}
+                                        loading={loading}
+                                        size={50}
+                                        aria-label="Loading Grid"
+                                        data-testid="loader"
+                                    />
+                                </div>
+                            ) : (
+                                seriesCards
                             )}
 
                             </Grid>

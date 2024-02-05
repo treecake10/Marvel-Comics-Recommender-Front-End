@@ -1,9 +1,40 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import BarLoader from "react-spinners/BarLoader";
 
-const DataList = ({ array = [], listName, listStyle, loading }) => {
+const DataList = ({ array = [], listName, loading }) => {
+    let displayProperty;
+    let listIdRoute;
+
+    switch (listName) {
+        case 'Characters':
+            displayProperty = 'name';
+            
+            listIdRoute = 'character';
+            break;
+        case 'Creators':
+            displayProperty = 'fullName';
+            
+            listIdRoute = 'creator';
+            break;
+        case 'Comics':
+            displayProperty = 'title';
+            
+            listIdRoute = 'comic';
+            break;
+        case 'Series':
+            displayProperty = 'title';
+          
+            listIdRoute = 'series';
+            break;
+        default:
+            displayProperty = 'title';
+            listIdRoute = 'event';
+            break;
+    }
+
     return (
-        <div className={listStyle}>
+        <div className="lists">
             <h2>{listName}</h2>
             <br />
             {loading ? (
@@ -16,12 +47,15 @@ const DataList = ({ array = [], listName, listStyle, loading }) => {
                 />
             ) : (
                 <ul>
-                    {array.map((item, index) => (
-                        <li key={index}>{item.title}</li>
+                    {array && array.map((item, index) => (
+                        <li key={index}>
+                            <Link to={`/${listIdRoute}/${item.id}`}>{item[displayProperty]}</Link>
+                        </li>
                     ))}
                 </ul>
             )}
         </div>
     );
 }
+
 export default DataList;
