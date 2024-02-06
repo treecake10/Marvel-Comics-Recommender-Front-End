@@ -39,10 +39,9 @@ input {
 }
 
 .container-component {
-  width: min(90%, 45rem);
+  width: min(90%, 100rem);
   margin: 0rem auto;
   margin-top: 5vh;
-  padding-left: 2vw;
 }
 
 .grid-component {
@@ -76,7 +75,6 @@ input {
 
 .loading-container {
   margin-top: 1vh;
-  margin-right: 2vw;
   position: relative;
 }
 
