@@ -9,23 +9,23 @@ const DataList = ({ array = [], listName, loading }) => {
     switch (listName) {
         case 'Characters':
             displayProperty = 'name';
-            
             listIdRoute = 'character';
             break;
         case 'Creators':
             displayProperty = 'fullName';
-            
             listIdRoute = 'creator';
             break;
         case 'Comics':
             displayProperty = 'title';
-            
             listIdRoute = 'comic';
             break;
         case 'Series':
             displayProperty = 'title';
-          
             listIdRoute = 'series';
+            break;
+        case 'Event':
+            displayProperty = 'name';
+            listIdRoute = 'event';
             break;
         default:
             displayProperty = 'title';

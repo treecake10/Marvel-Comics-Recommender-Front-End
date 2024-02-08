@@ -189,8 +189,8 @@
 /** Detail pages (Characters, Comics, Series, Events, and Creators) **/
 
 .container.large {
-  width: 98%;
-  margin-left: 0.75%;
+  width: 85%;
+  /* margin-left: 0.75%; */
   margin: 1rem auto;
 }
 

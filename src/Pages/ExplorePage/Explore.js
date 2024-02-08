@@ -27,9 +27,6 @@ const Explore = () => {
     const [error, setError] = useState();
     const [toggleState, setToggleState] = useState(1);
     const [loading, setLoading] = useState(false);
-    const [comicTitleName, setComicTitleName] = useState("");
-    const [comicStartYear, setComicStartYear] = useState("");
-    const [comicIssueNumber, setComicIssueNumber] = useState("");
 
     const toggleTab = (index) => {
         setToggleState(index);
@@ -133,7 +130,7 @@ const Explore = () => {
         <Card
             name={title}
             key={id}
-            category={"comics"}
+            category={"comic"}
             id={id}
             thumbnail={`${thumbnail.path}/${IMG_FANTASTIC}.${thumbnail.extension}`}
         />
@@ -219,9 +216,6 @@ const Explore = () => {
                             placeholder3={"Issue #"}
                             setResults={setComicTitle}
                             setError={setError}
-                            setInput1={setComicTitleName}
-                            setInput2={setComicStartYear}
-                            setInput3={setComicIssueNumber}
                         />
 
                         <Container containerName={loading ? "center-loading" : "container-component comics"}>
@@ -282,7 +276,7 @@ const Explore = () => {
                     <React.Fragment>
                         <SearchBar
                             handleClick={handleCreatorClick}
-                            placeholder1={"Search creators..."}
+                            placeholder1={"Search a creator..."}
                             setResults={setCreators}
                             setError={setError}
                         />

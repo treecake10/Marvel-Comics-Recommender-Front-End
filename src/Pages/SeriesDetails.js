@@ -7,7 +7,7 @@ import {
   fetchEventsBySeriesId,
   fetchCreatorsBySeriesId,
 } from '../libs/utils';
-import ParallelDataFetcher from '../Components/DataTools/ConcurrentDataFetcher';
+import ConcurrentDataFetcher from '../Components/DataTools/ConcurrentDataFetcher';
 import DataList from '../Components/DataList';
 import Like from '../Components/Icons/Like';
 import Favorite from '../Components/Icons/Favorite';
@@ -51,7 +51,7 @@ const SeriesDetails = () => {
       dispatch({ type: SET_LOADING, listType, value: true });
 
       if (availability) {
-        const result = await ParallelDataFetcher(fetchFunction, id, availability);
+        const result = await ConcurrentDataFetcher(fetchFunction, id, availability);
         dispatch({ type: SET_LIST, listType, result });
       }
     } catch (error) {

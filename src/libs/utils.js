@@ -144,13 +144,13 @@ const fetchCreatorById = async (id) => {
 };
 
 const fetchSeriesByCreatorId = async (id, offset) => {
-  let storiesUrl = `${API_URL}/v1/public/creators/${id}/series`;
+  let seriesUrl = `${API_URL}/v1/public/creators/${id}/series`;
 
   let timeStamp = Date.now().toString()
   let limit = 100
   let hash = getHash(timeStamp, privateKey, apiKey)
 
-  let url = `${storiesUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&limit=${limit}&offset=${offset}`;
+  let url = `${seriesUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&limit=${limit}&offset=${offset}`;
 
   try {
     let response = await fetch(url);
@@ -322,6 +322,66 @@ const fetchComicByTitleAndIssue = async (title, year, issue, offset) => {
 
 };
 
+const fetchComicById = async (id) => {
+  let comicUrl = `${API_URL}/v1/public/comics/${id}`;
+
+  let timeStamp = Date.now().toString()
+  let hash = getHash(timeStamp, privateKey, apiKey)
+
+  let url = `${comicUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}`;
+
+  try {
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log(data.data.results);
+    return data.data.results;
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+
+};
+
+const fetchCharactersByComicId = async (id, offset) => {
+  let charactersUrl = `${API_URL}/v1/public/comics/${id}/characters`;
+
+  let timeStamp = Date.now().toString()
+  let limit = 100
+  let hash = getHash(timeStamp, privateKey, apiKey)
+
+  let url = `${charactersUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&limit=${limit}&offset=${offset}`;
+
+  try {
+    let response = await fetch(url);
+    let data = await response.json();
+    return data.data.results;
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+
+}
+
+const fetchCreatorsByComicId = async (id, offset) => {
+  let creatorsUrl = `${API_URL}/v1/public/comics/${id}/creators`;
+
+  let timeStamp = Date.now().toString()
+  let limit = 100
+  let hash = getHash(timeStamp, privateKey, apiKey)
+
+  let url = `${creatorsUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&limit=${limit}&offset=${offset}`;
+
+  try {
+    let response = await fetch(url);
+    let data = await response.json();
+    return data.data.results;
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+
+};
+
 export {
     fetchHomepageComicEvents, 
     fetchCharactersByName, 
@@ -337,5 +397,8 @@ export {
     fetchCharactersBySeriesId,
     fetchEventsBySeriesId,
     fetchCreatorsBySeriesId,
-    fetchComicByTitleAndIssue
+    fetchComicByTitleAndIssue,
+    fetchComicById,
+    fetchCharactersByComicId,
+    fetchCreatorsByComicId
 };

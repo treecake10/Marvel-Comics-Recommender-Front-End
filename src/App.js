@@ -4,6 +4,7 @@ import Explore from './Pages/ExplorePage/Explore';
 import CharacterDetails from './Pages/CharacterDetails';
 import SeriesDetails from './Pages/SeriesDetails';
 import CreatorDetails from './Pages/CreatorDetails';
+import ComicDetails from './Pages/ComicDetails';
 import Header from './Components/Header'
 import Footer from './Components/Footer';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -28,6 +29,7 @@ const App = () => {
           <Route path="/character/:id" element={<CharacterDetails />} />
           <Route path="/series/:id" element={<SeriesDetails />} />
           <Route path="/creator/:id" element={<CreatorDetails />} />
+          <Route path="/comic/:id" element={<ComicDetails />} />
         </Routes>
         <Footer />
       </div>
