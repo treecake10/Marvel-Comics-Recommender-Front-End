@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams } from "react-router-dom";
 import { fetchCreatorById, fetchSeriesByCreatorId, fetchEventsByCreatorId } from "../libs/utils";
-import ParallelDataFetcher from "../Components/DataTools/ParallelDataFetcher";
+import ConcurrentDataFetcher from "../Components/DataTools/ConcurrentDataFetcher";
 import DataList from "../Components/DataList";
 import Like from "../Components/Icons/Like";
 import Favorite from "../Components/Icons/Favorite";
@@ -9,18 +9,16 @@ import Favorite from "../Components/Icons/Favorite";
 const CreatorDetails = () => {
     const { id } = useParams();
     const [creator, setCreator] = useState(null);
+
     const [data, setData] = useState({
         series: [],
         events: [],
     });
-    // const [series, setSeries] = useState([]);
-    // const [events, setEvents] = useState([]);
+    
     const [loading, setLoading] = useState({
         series: false,
         events: false,
     });
-    // const [loadSeries, setSeriesLoading] = useState(false);
-    // const [loadEvents, setEventsLoading] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -36,23 +34,18 @@ const CreatorDetails = () => {
     }, [id]);
 
     const fetchListData = async (fetchFunction, listType) => {
-        //listType === 'events' ? setEventsLoading(true) : setSeriesLoading(true);
+        
         setLoading((prevLoading) => ({ ...prevLoading, [listType]: true }));
+
         try {
             if (creator && creator[listType]?.available) {
                 const availability = creator[listType].available;
-                const result = await memoizedParallelDataFetcher(fetchFunction, id, availability);
+                const result = await memoizedConcurrentDataFetcher(fetchFunction, id, availability);
                 setData((prevData) => ({ ...prevData, [listType]: result }));
-                // if (listType === 'events') {
-                //     setEvents(result);
-                // } else {
-                //     setSeries(result);
-                // }
             }
         } catch (error) {
             console.error(error);
         } finally {
-            //listType === 'events' ? setEventsLoading(false) : setSeriesLoading(false);
             setLoading((prevLoading) => ({ ...prevLoading, [listType]: false }));
         }
     };
@@ -62,7 +55,7 @@ const CreatorDetails = () => {
         fetchListData(fetchSeriesByCreatorId, 'series');
     }, [id, creator]);
 
-    const memoizedParallelDataFetcher = useMemo(() => ParallelDataFetcher, []);
+    const memoizedConcurrentDataFetcher = useMemo(() => ConcurrentDataFetcher, []);
 
     if (!creator) return null;
 

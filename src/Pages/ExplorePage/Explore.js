@@ -1,8 +1,14 @@
 import { useState } from "react";
-import React from "react";
+import React, { useMemo } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
-import { fetchCharactersByName, fetchCreatorsByName, fetchSeriesByTitle } from "../../libs/utils";
+import { 
+    fetchCharactersByName, 
+    fetchCreatorsByName, 
+    fetchSeriesByTitle, 
+    fetchComicByTitleAndIssue } 
+from "../../libs/utils";
 import DataSearchFetcher from "../../Components/DataTools/DataSearchFetcher";
+import ConcurrentDataFetcher from "../../Components/DataTools/ConcurrentDataFetcher";
 import Container from "../../Components/CardsLayout/Container";
 import Grid from "../../Components/CardsLayout/Grid";
 import Card from "../../Components/CardsLayout/Card";
@@ -17,9 +23,13 @@ const Explore = () => {
     const [characters, setCharacters] = useState([]);
     const [series, setSeries] = useState([]);
     const [creators, setCreators] = useState([]);
+    const [comicTitle, setComicTitle] = useState([]);
     const [error, setError] = useState();
     const [toggleState, setToggleState] = useState(1);
     const [loading, setLoading] = useState(false);
+    const [comicTitleName, setComicTitleName] = useState("");
+    const [comicStartYear, setComicStartYear] = useState("");
+    const [comicIssueNumber, setComicIssueNumber] = useState("");
 
     const toggleTab = (index) => {
         setToggleState(index);
@@ -38,7 +48,6 @@ const Explore = () => {
         } finally {
             setLoading(false);
         }
-       
     };
 
     const handleSeriesClick = async (e, args) => {
@@ -46,7 +55,7 @@ const Explore = () => {
         if (args === "") return [];
         try {
             setLoading(true);
-            const result = await DataSearchFetcher(fetchSeriesByTitle, args);
+            const result = await ConcurrentDataFetcher(fetchSeriesByTitle, args, true);
             return result;
         } catch (error) {
             console.error(error);
@@ -54,7 +63,6 @@ const Explore = () => {
         } finally {
             setLoading(false);
         }
-       
     };
     
     const handleCreatorClick = async (e, args) => {
@@ -62,7 +70,7 @@ const Explore = () => {
         if (args === "") return [];
         try {
             setLoading(true);
-            const result = await DataSearchFetcher(fetchCreatorsByName, args);
+            const result = await ConcurrentDataFetcher(fetchCreatorsByName, args, true);
             return result;
         } catch (error) {
             console.error(error);
@@ -72,8 +80,26 @@ const Explore = () => {
         }
     };
 
-    
-    const characterCards = characters.map(({ id, name, thumbnail }) => (
+    const handleComicsClick = async (e, { title, year, issue }) => {
+        e.preventDefault();
+        if (title === "" || year === "" || issue === "") {
+            alert("Please fill in all the fields.");
+            return;
+        }
+        if (title === "" || year === "" || issue === "") return [];
+        try {
+            setLoading(true);
+            const result = await fetchComicByTitleAndIssue(title, year, issue);
+            return result;
+        } catch (error) {
+            console.error(error);
+            setError(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const characterCards = useMemo(() => characters && characters.length > 0 ? characters.map(({ id, name, thumbnail }) => (
         <Card
             name={name}
             key={id}
@@ -81,9 +107,9 @@ const Explore = () => {
             id={id}
             thumbnail={`${thumbnail.path}/${IMG_FANTASTIC}.${thumbnail.extension}`}
         />
-    )); 
-
-    const seriesCards = series.map(({ id, title, thumbnail }) => (
+    )) : null, [characters]);
+    
+    const seriesCards = useMemo(() => series && series.length > 0 ? series.map(({ id, title, thumbnail }) => (
         <Card
             name={title}
             key={id}
@@ -91,9 +117,9 @@ const Explore = () => {
             id={id}
             thumbnail={`${thumbnail.path}/${IMG_FANTASTIC}.${thumbnail.extension}`}
         />
-    )); 
-
-    const creatorCards = creators.map(({ id, fullName, thumbnail }) => (
+    )) : null, [series]);
+    
+    const creatorCards = useMemo(() => creators && creators.length > 0 ? creators.map(({ id, fullName, thumbnail }) => (
         <Card
             name={fullName}
             key={id}
@@ -101,9 +127,18 @@ const Explore = () => {
             id={id}
             thumbnail={`${thumbnail.path}/${IMG_FANTASTIC}.${thumbnail.extension}`}
         />
-    )); 
+    )) : null, [creators]);
     
-
+    const comicCards = useMemo(() => comicTitle && comicTitle.length > 0 ? comicTitle.map(({ id, title, thumbnail }) => (
+        <Card
+            name={title}
+            key={id}
+            category={"comics"}
+            id={id}
+            thumbnail={`${thumbnail.path}/${IMG_FANTASTIC}.${thumbnail.extension}`}
+        />
+    )) : null, [comicTitle]);
+    
     return(
         <div className="home">
             <br />
@@ -145,28 +180,65 @@ const Explore = () => {
                     <React.Fragment>
                         <SearchBar
                             handleClick={handleCharacterClick}
-                            placeholder={"Search character or team..."}
+                            placeholder1={"Search character or team..."}
                             setResults={setCharacters}
                             setError={setError}
                         />
 
-                        <Container>
-                            <Grid>
+                        <Container containerName={loading ? "center-loading" : "container-component characters"}>
+                            <Grid gridName={"grid-component"}>
                             
-                            {loading ? (
-                                <div className="loading-container">
-                                    <ClipLoader
-                                        color={'#F0131E'}
-                                        loading={loading}
-                                        size={50}
-                                        aria-label="Loading Grid"
-                                        data-testid="loader"
-                                    />
-                                </div>
-                            ) : (
-                                characterCards
-                            )}
+                                {loading ? (
+                                    <div className="loading-container">
+                                        <ClipLoader
+                                            color={'#F0131E'}
+                                            loading={loading}
+                                            size={50}
+                                            aria-label="Loading Grid"
+                                            data-testid="loader"
+                                        />
+                                    </div>
+                                ) : (
+                                    characterCards
+                                )}
 
+                            </Grid>
+                        </Container>
+                    </React.Fragment>
+                )}  
+            </div>
+
+            <div className={toggleState === 2 ? "tabs__content" : null}>
+                {toggleState === 2 && ( 
+                    <React.Fragment>
+                        <SearchBar
+                            handleClick={handleComicsClick}
+                            comicSearch={true}
+                            placeholder1={"Title name"}
+                            placeholder2={"Start year"}
+                            placeholder3={"Issue #"}
+                            setResults={setComicTitle}
+                            setError={setError}
+                            setInput1={setComicTitleName}
+                            setInput2={setComicStartYear}
+                            setInput3={setComicIssueNumber}
+                        />
+
+                        <Container containerName={loading ? "center-loading" : "container-component comics"}>
+                            <Grid gridName={"grid-component"}>
+                                {loading ? (
+                                    <div className="loading-container">
+                                        <ClipLoader
+                                            color={'#F0131E'}
+                                            loading={loading}
+                                            size={50}
+                                            aria-label="Loading Grid"
+                                            data-testid="loader"
+                                        />
+                                    </div>
+                                ) : (
+                                    comicCards
+                                )} 
                             </Grid>
                         </Container>
                     </React.Fragment>
@@ -179,28 +251,26 @@ const Explore = () => {
                         <p className="creator-paragraph">Enter the complete name of the title to find a comic series:</p>
                         <SearchBar
                             handleClick={handleSeriesClick}
-                            placeholder={"Search a comic series..."}
+                            placeholder1={"Search a comic series..."}
                             setResults={setSeries}
                             setError={setError}
                         />
 
-                        <Container>
-                            <Grid>
-                            
-                            {loading ? (
-                                <div className="loading-container">
-                                    <ClipLoader
-                                        color={'#F0131E'}
-                                        loading={loading}
-                                        size={50}
-                                        aria-label="Loading Grid"
-                                        data-testid="loader"
-                                    />
-                                </div>
-                            ) : (
-                                seriesCards
-                            )}
-
+                        <Container containerName={loading ? "center-loading" : "container-component series"}>
+                            <Grid gridName={"grid-component"}>
+                                {loading ? (
+                                    <div className="loading-container">
+                                        <ClipLoader
+                                            color={'#F0131E'}
+                                            loading={loading}
+                                            size={50}
+                                            aria-label="Loading Grid"
+                                            data-testid="loader"
+                                        />
+                                    </div>
+                                ) : (
+                                    seriesCards
+                                )}
                             </Grid>
                         </Container>
                     </React.Fragment>
@@ -210,15 +280,14 @@ const Explore = () => {
             <div className={toggleState === 5 ? "tabs__content" : null}>
                 {toggleState === 5 && ( 
                     <React.Fragment>
-                        <p className="creator-paragraph">Enter the complete first, last, or full name to find creators:</p>
                         <SearchBar
                             handleClick={handleCreatorClick}
-                            placeholder={"Search creators..."}
+                            placeholder1={"Search creators..."}
                             setResults={setCreators}
                             setError={setError}
                         />
-                        <Container>
-                            <Grid>
+                        <Container containerName={loading ? "center-loading" : "container-component characters"}>
+                            <Grid gridName={"grid-component"}>
                             {loading ? (
                                 <div className="loading-container">
                                     <ClipLoader
@@ -243,3 +312,6 @@ const Explore = () => {
     )
 }
 export default Explore;
+
+
+

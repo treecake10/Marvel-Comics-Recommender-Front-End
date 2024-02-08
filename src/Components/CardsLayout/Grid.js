@@ -1,6 +1,6 @@
 import React from "react";
 
-const Grid = ({ children }) => {
-    return <div className="grid-component">{children}</div>;
+const Grid = ({ children, gridName }) => {
+    return <div className={gridName}>{children}</div>;
 }
 export default Grid;

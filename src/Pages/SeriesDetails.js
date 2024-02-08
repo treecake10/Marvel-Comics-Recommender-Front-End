@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useReducer } from 'react';
+import React, { useEffect, useMemo, useReducer } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   fetchSeriesById,
@@ -7,7 +7,7 @@ import {
   fetchEventsBySeriesId,
   fetchCreatorsBySeriesId,
 } from '../libs/utils';
-import ParallelDataFetcher from '../Components/DataTools/ParallelDataFetcher';
+import ParallelDataFetcher from '../Components/DataTools/ConcurrentDataFetcher';
 import DataList from '../Components/DataList';
 import Like from '../Components/Icons/Like';
 import Favorite from '../Components/Icons/Favorite';
@@ -45,33 +45,18 @@ const SeriesDetails = () => {
   const { id } = useParams();
   const [state, dispatch] = useReducer(reducer, initialState);
   const { comics, characters, events, creators, loadings } = state;
-
-//   const [series, setSeries] = useState([]);
-//   const [comics, setComics] = useState(null);
-//   const [events, setEvents] = useState(null);
-//   const [creators, setCreators] = useState(null);
-//   const [characters, setCharacters] = useState(null);
-
-//   const [loadComics, setComicsLoading] = useState(false);
-//   const [loadCharacters, setCharactersLoading] = useState(false);
-//   const [loadCreators, setCreatorsLoading] = useState(false);
-//   const [loadEvents, setEventsLoading] = useState(false);
     
-
   const fetchListData = async (fetchFunction, listType, availability) => {
     try {
-      //setLoadings(listType, true);
       dispatch({ type: SET_LOADING, listType, value: true });
 
       if (availability) {
         const result = await ParallelDataFetcher(fetchFunction, id, availability);
-        //setList(listType, result);
         dispatch({ type: SET_LIST, listType, result });
       }
     } catch (error) {
       console.error(error);
     } finally {
-      //setLoadings(listType, false);
       dispatch({ type: SET_LOADING, listType, value: false });
     }
   };
@@ -80,7 +65,6 @@ const SeriesDetails = () => {
     const fetchSeriesDetails = async () => {
       try {
         const seriesData = await fetchSeriesById(id);
-        //setSeries(seriesData[0]);
         dispatch({ type: SET_LIST, listType: 'series', result: seriesData[0] });
       } catch (error) {
         console.error(error);
@@ -100,46 +84,11 @@ const SeriesDetails = () => {
     }
   }, [id, state.series]);
 
-//   const setList = (listType, result) => {
-//     switch (listType) {
-//       case 'characters':
-//         setCharacters(result);
-//         break;
-//       case 'comics':
-//         setComics(result);
-//         break;
-//       case 'events':
-//         setEvents(result);
-//         break;
-//       case 'creators':
-//         setCreators(result);
-//         break;
-//       default:
-//         break;
-//     }
-//   };
-
-//   const setLoadings = (listType, value) => {
-//     switch (listType) {
-//       case 'characters':
-//         setCharactersLoading(value);
-//         break;
-//       case 'comics':
-//         setComicsLoading(value);
-//         break;
-//       case 'events':
-//         setEventsLoading(value);
-//         break;
-//       case 'creators':
-//         setCreatorsLoading(value);
-//         break;
-//       default:
-//         break;
-//     }
-//   };
-
   // Memoize the reversedComics array to avoid recomputing it on each render
   const reversedComics = useMemo(() => (comics ? [...comics].reverse() : null), [comics]);
+  const memoizedCreators = useMemo(() => creators, [creators]);
+  const memoizedCharacters = useMemo(() => characters, [characters]);
+  const memoizedEvents = useMemo(() => events, [events]);
 
   if (!state.series) return null;
 
@@ -172,11 +121,11 @@ const SeriesDetails = () => {
             <div className="column-space"></div>
             <DataList array={reversedComics} listName="Comics" loading={loadings.comics} />
             <div className="column-space"></div>
-            <DataList array={creators} listName="Creators" loading={loadings.creators} />
+            <DataList array={memoizedCreators} listName="Creators" loading={loadings.creators} />
             <div className="column-space"></div>
-            <DataList array={characters} listName="Characters" loading={loadings.characters} />
+            <DataList array={memoizedCharacters} listName="Characters" loading={loadings.characters} />
             <div className="column-space"></div>
-            <DataList array={events} listName="Events" loading={loadings.events} />
+            <DataList array={memoizedEvents} listName="Events" loading={loadings.events} />
           </div>
         </div>
       </div>

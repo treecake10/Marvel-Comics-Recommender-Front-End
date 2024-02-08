@@ -302,6 +302,26 @@ const fetchCreatorsBySeriesId = async (id, offset) => {
 
 };
 
+const fetchComicByTitleAndIssue = async (title, year, issue, offset) => {
+  let comicUrl = `${API_URL}/v1/public/comics`;
+
+  let timeStamp = Date.now().toString()
+  let limit = 100
+  let hash = getHash(timeStamp, privateKey, apiKey)
+
+  let url = `${comicUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&limit=${limit}&offset=${offset}&titleStartsWith=${title}&startYear=${year}&issueNumber=${issue}`;
+
+  try {
+    let response = await fetch(url);
+    let data = await response.json();
+    return data.data.results;
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+
+};
+
 export {
     fetchHomepageComicEvents, 
     fetchCharactersByName, 
@@ -316,5 +336,6 @@ export {
     fetchComicsBySeriesId,
     fetchCharactersBySeriesId,
     fetchEventsBySeriesId,
-    fetchCreatorsBySeriesId
+    fetchCreatorsBySeriesId,
+    fetchComicByTitleAndIssue
 };
