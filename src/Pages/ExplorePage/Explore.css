@@ -61,11 +61,11 @@ input {
   width: min(90%, 100rem);
 }
 
-.characters {
+.characters-or-creators {
   width: min(90%, 45rem);
 }
 
-.comics {
+.comics-or-events {
   width: min(90%, 12rem);
 }
 

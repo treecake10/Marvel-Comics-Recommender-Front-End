@@ -34,7 +34,7 @@ const ComicDetails = () => {
             try {
                 const comicData = await fetchComicById(id);
                 setComic(comicData[0]);
-                if (comicData[0] && comicData[0]) {
+                if (comicData[0].events.items) {
                     setData((prevData) => ({ ...prevData, events: comicData[0].events.items }));
                 }
             } catch (error) {
@@ -86,7 +86,7 @@ const ComicDetails = () => {
                                 <h1>{title}</h1>
                             </div>
                             <br />
-                            <h2>Series:</h2>
+                            <h2>Series</h2>
                             <p>{series.name}</p>
                             <br />
                             <h2>Description</h2>

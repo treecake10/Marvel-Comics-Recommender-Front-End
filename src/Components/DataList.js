@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import BarLoader from "react-spinners/BarLoader";
 
 const DataList = ({ array = [], listName, loading }) => {
+
+    const dataArray = Array.isArray(array) ? array : [];
+
     let displayProperty;
     let listIdRoute;
 
@@ -47,7 +50,7 @@ const DataList = ({ array = [], listName, loading }) => {
                 />
             ) : (
                 <ul>
-                    {array && array.map((item, index) => (
+                    {dataArray.map((item, index) => (
                         <li key={index}>
                             <Link to={`/${listIdRoute}/${item.id}`}>{item[displayProperty]}</Link>
                         </li>

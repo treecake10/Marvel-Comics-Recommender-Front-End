@@ -109,7 +109,6 @@ const SeriesDetails = () => {
               <h2>Description:</h2>
               {description ? <p>{description}</p> : <p>Not Found</p>}
               <br />
-
               <div className="contents__arrangement">
                 <Like />
                 <div className="middle-column-spacing"></div>

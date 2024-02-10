@@ -5,7 +5,8 @@ import {
     fetchCharactersByName, 
     fetchCreatorsByName, 
     fetchSeriesByTitle, 
-    fetchComicByTitleAndIssue } 
+    fetchComicByTitleAndIssue,
+    fetchEventByName } 
 from "../../libs/utils";
 import DataSearchFetcher from "../../Components/DataTools/DataSearchFetcher";
 import ConcurrentDataFetcher from "../../Components/DataTools/ConcurrentDataFetcher";
@@ -24,6 +25,7 @@ const Explore = () => {
     const [series, setSeries] = useState([]);
     const [creators, setCreators] = useState([]);
     const [comicTitle, setComicTitle] = useState([]);
+    const [event, setEvent] = useState([]);
     const [error, setError] = useState();
     const [toggleState, setToggleState] = useState(1);
     const [loading, setLoading] = useState(false);
@@ -96,6 +98,21 @@ const Explore = () => {
         }
     };
 
+    const handleEventClick = async (e, args) => {
+        e.preventDefault();
+        if (args === "") return [];
+        try {
+            setLoading(true);
+            const result = await DataSearchFetcher(fetchEventByName, args);
+            return result;
+        } catch (error) {
+            console.error(error);
+            setError(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const characterCards = useMemo(() => characters && characters.length > 0 ? characters.map(({ id, name, thumbnail }) => (
         <Card
             name={name}
@@ -135,6 +152,16 @@ const Explore = () => {
             thumbnail={`${thumbnail.path}/${IMG_FANTASTIC}.${thumbnail.extension}`}
         />
     )) : null, [comicTitle]);
+
+    const eventCards = useMemo(() => event && event.length > 0 ? event.map(({ id, title, thumbnail }) => (
+        <Card
+            name={title}
+            key={id}
+            category={"event"}
+            id={id}
+            thumbnail={`${thumbnail.path}/${IMG_FANTASTIC}.${thumbnail.extension}`}
+        />
+    )) : null, [event]);
     
     return(
         <div className="home">
@@ -182,7 +209,7 @@ const Explore = () => {
                             setError={setError}
                         />
 
-                        <Container containerName={loading ? "center-loading" : "container-component characters"}>
+                        <Container containerName={loading ? "center-loading" : "container-component characters-or-creators"}>
                             <Grid gridName={"grid-component"}>
                             
                                 {loading ? (
@@ -218,7 +245,7 @@ const Explore = () => {
                             setError={setError}
                         />
 
-                        <Container containerName={loading ? "center-loading" : "container-component comics"}>
+                        <Container containerName={loading ? "center-loading" : "container-component comics-or-events"}>
                             <Grid gridName={"grid-component"}>
                                 {loading ? (
                                     <div className="loading-container">
@@ -242,10 +269,10 @@ const Explore = () => {
             <div className={toggleState === 3 ? "tabs__content" : null}>
                 {toggleState === 3 && ( 
                     <React.Fragment>
-                        <p className="creator-paragraph">Enter the complete name of the title to find a comic series:</p>
+                        <p className="creator-paragraph">Enter full name of title for fastest/most accurate results:</p>
                         <SearchBar
                             handleClick={handleSeriesClick}
-                            placeholder1={"Search a comic series..."}
+                            placeholder1={"Search title or series..."}
                             setResults={setSeries}
                             setError={setError}
                         />
@@ -271,16 +298,48 @@ const Explore = () => {
                 )}  
             </div>
 
+            <div className={toggleState === 4 ? "tabs__content" : null}>
+                {toggleState === 4 && ( 
+                    <React.Fragment>
+                        {/* <p className="creator-paragraph">Enter the complete name of the title to find a comic series:</p> */}
+                        <SearchBar
+                            handleClick={handleEventClick}
+                            placeholder1={"Search event..."}
+                            setResults={setEvent}
+                            setError={setError}
+                        />
+
+                        <Container containerName={loading ? "center-loading" : "container-component comics-or-events"}>
+                            <Grid gridName={"grid-component"}>
+                                {loading ? (
+                                    <div className="loading-container">
+                                        <ClipLoader
+                                            color={'#F0131E'}
+                                            loading={loading}
+                                            size={50}
+                                            aria-label="Loading Grid"
+                                            data-testid="loader"
+                                        />
+                                    </div>
+                                ) : (
+                                    eventCards
+                                )}
+                            </Grid>
+                        </Container>
+                    </React.Fragment>
+                )}  
+            </div>
+
             <div className={toggleState === 5 ? "tabs__content" : null}>
                 {toggleState === 5 && ( 
                     <React.Fragment>
                         <SearchBar
                             handleClick={handleCreatorClick}
-                            placeholder1={"Search a creator..."}
+                            placeholder1={"Search creator..."}
                             setResults={setCreators}
                             setError={setError}
                         />
-                        <Container containerName={loading ? "center-loading" : "container-component characters"}>
+                        <Container containerName={loading ? "center-loading" : "container-component characters-or-creators"}>
                             <Grid gridName={"grid-component"}>
                             {loading ? (
                                 <div className="loading-container">
