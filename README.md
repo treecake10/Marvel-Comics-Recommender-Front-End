@@ -19,13 +19,19 @@ This is a web application employing the Marvel API in which a user can create th
 
 ![series_results](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/e611beb0-7823-41dc-aea8-d2a1c38109c1)
 
-## Find Creator
-![CreatorSearch2](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/3f702972-cc07-4c70-84de-2d4b0f3c2fc1)
+## Series Page
+![series_details_fav](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/3f9b75bc-5bc8-4c92-be2a-1d0bc105c766)
 
-## Creator Page
-![CreatorPagePt1](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/4ab8973e-35cc-4dfd-9db2-61f67e193319)
+## Find a Comic
+![find_comic_empty](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/6f0bb57a-3056-44fb-8666-3904e4a664e9)
 
-## Creator Page
-![CreatorPagePt2](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/f49d7757-b7f8-49d0-9d1d-851a95e67ea9)
+![find_comic_search](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/920e7bb9-873f-4775-b45c-406e69e2877d)
 
+## Search Event
+![search_event_1](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/930f8df2-79f7-408f-9548-035768911ccb)
+
+![search_event_2](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/8e1cadac-58a1-4c3d-9563-c4e10906441b)
+
+## Event Page
+![event_details_like_fav](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/4885208f-47fc-4339-983e-dd5a0442f0b9)
 
