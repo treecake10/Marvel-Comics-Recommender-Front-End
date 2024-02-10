@@ -13,7 +13,6 @@ This is a web application employing the Marvel API in which a user can create th
 ![CharacterPage](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/30c3e43b-8a37-4f03-8a29-3f86cc6c920c)
 
 ## Series Search
-![series_search](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/8334aaa2-8097-431e-b719-be45bf3bb59e)
 
 ![series_load](https://github.com/treecake10/Marvel-Comics-Recommender-System/assets/25542109/364ebecd-ef57-49b5-8727-b88371507f11)
 
