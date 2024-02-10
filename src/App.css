@@ -45,6 +45,25 @@
   cursor: pointer;
 }
 
+@media screen and (max-width: 650px) {
+  .marvel-logo {
+    width: 60px;
+  }
+  .myplace{
+    height: 2.0rem;
+    font-size: 1.25rem;
+  }
+}
+
+@media screen and (max-width: 530px) {
+  .header{
+    padding: 0px 0px;
+  }
+  .marvel-logo {
+    width: 55px;
+  }
+}
+
 .header .navigation{
   list-style: none;
 }
