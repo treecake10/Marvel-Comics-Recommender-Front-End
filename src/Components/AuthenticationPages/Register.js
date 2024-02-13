@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import User from '../Icons/User';
 import Envelope from '../Icons/Envelope';
 import Lock from '../Icons/Lock';
