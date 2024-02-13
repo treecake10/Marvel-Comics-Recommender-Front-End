@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
+import Button from "./Button";
 import MarvelLogo from '../Images/Marvel_Logo.svg.png';
 
 const Header = () => {
@@ -24,7 +25,12 @@ const Header = () => {
                 </ul>
             </nav>
             <div className='btn'>
-                <button type="button">Login</button>
+                <Link to={'/login'}>
+                    <Button
+                        className="button"
+                        text="Login"
+                    />
+                </Link>
             </div>
             
         </div>

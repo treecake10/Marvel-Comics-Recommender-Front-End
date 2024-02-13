@@ -271,3 +271,98 @@
   width: auto; 
 }
 
+/** User Authentication Pages **/
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  margin-top: 75px;
+  width: 600px;
+  border-radius: 30px;
+  background-color: white;
+  padding-bottom: 30px; 
+}
+
+.auth-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.auth-text {
+ color: #F0131E;
+ font-size: 48px;
+ font-weight: 700;
+}
+
+.auth-inputs {
+  margin-top: 55px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.auth-input {
+  display: flex;
+  align-items: center;
+  margin: auto;
+  width: 480px;
+  height: 80px;
+  background: #eaeaea;
+  border-radius: 6px;
+}
+
+.auth-img {
+  margin: 0px 30px;
+}
+
+.auth-input input {
+  height: 50px;
+  width: 400px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #797979;
+  font-size: 19px;
+}
+
+.forgot-password {
+  padding-left: 62px;
+  margin-top: 27px;
+  color: #797979;
+  font-size: 18px;
+}
+
+.forgot-password span {
+  color: #F0131E;
+  cursor: pointer;
+}
+
+.auth-submit-container {
+  display: flex;
+  gap: 30px;
+  margin: 60px auto;
+}
+
+.auth-submit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 220px;
+  height: 59px;
+  color: white;
+  background: #F0131E;
+  border-radius: 50px;
+  font-size: 19px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.gray{
+  background: #eaeaea;
+  color: #676767;
+}
+

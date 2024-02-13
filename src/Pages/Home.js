@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from "react-router-dom";
 import { fetchHomepageComicEvents } from "../libs/utils";
+import Button from "../Components/Button";
 import GridLoader from "react-spinners/GridLoader";
 
 const Home = () => {
@@ -32,7 +34,12 @@ const Home = () => {
                 <div className="col">
                     <h2>Comics Just For You</h2>
                     <p>Sign in or create an account. Select your favorite characters, comics, series, events, and creators.<br/><br/>Get a recommended reading list tailored to your interests! </p>
-                    <button type="button">Get Started</button>
+                    <Link to={'/register'}>
+                        <Button
+                            className="button"
+                            text="Get Started"
+                        />
+                    </Link>
                 </div>
                 <div className="col">
                     {loading? (
