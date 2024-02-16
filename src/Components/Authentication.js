@@ -12,8 +12,11 @@ const Authentication = () => {
         const searchParams = new URLSearchParams(location.search);
         const type = searchParams.get('type');
         if (type) {
-            setAction(type === 'getStarted' ? 'Sign Up' : 'Login');
-            setAction(type === 'homeAuth' ? 'Login' : 'Sign Up');
+            if (type === 'getStarted') {
+                setAction('Sign Up');
+            } else if (type === 'homeAuth' || type === 'detailsPage') {
+                setAction('Login');
+            }
         }
     }, [location.search]);
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { fetchCharacterById } from "../libs/utils";
 import Like from "../Components/Icons/Like";
 import Favorite from "../Components/Icons/Favorite";
@@ -42,9 +42,13 @@ const CharacterDetails = () => {
                         ) : <p>Not Found</p>}
                         <br />
                         <div className="right-side">
-                            <Like/>
+                            <Link to="/authentication?type=detailsPage" className="link-style">
+                                <Like/>
+                            </Link>
                             <div className="middle-column-spacing"></div>
-                            <Favorite/>
+                            <Link to="/authentication?type=detailsPage" className="link-style">
+                                <Favorite/>
+                            </Link>
                         </div> 
                     </div>
                 </div>

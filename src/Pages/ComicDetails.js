@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
     fetchComicById,
     fetchCharactersByComicId,
@@ -94,9 +94,13 @@ const ComicDetails = () => {
                             <br />
                             <br />
                             <div className="contents__arrangement">
-                                <Like />
+                                <Link to="/authentication?type=detailsPage" className="link-style">
+                                    <Like />
+                                </Link>
                                 <div className="middle-column-spacing"></div>
-                                <Favorite />
+                                <Link to="/authentication?type=detailsPage" className="link-style">
+                                    <Favorite />
+                                </Link>
                             </div>
                         </div>
                     </div>

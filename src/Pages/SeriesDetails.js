@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useReducer } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import {
   fetchSeriesById,
   fetchComicsBySeriesId,
@@ -110,9 +110,13 @@ const SeriesDetails = () => {
               {description ? <p>{description}</p> : <p>Not Found</p>}
               <br />
               <div className="contents__arrangement">
-                <Like />
+                <Link to="/authentication?type=detailsPage" className="link-style">
+                  <Like />
+                </Link>
                 <div className="middle-column-spacing"></div>
-                <Favorite />
+                <Link to="/authentication?type=detailsPage" className="link-style">
+                  <Favorite />
+                </Link>
               </div>
             </div>
           </div>
