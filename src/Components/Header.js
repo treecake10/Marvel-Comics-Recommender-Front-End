@@ -25,7 +25,7 @@ const Header = () => {
                 </ul>
             </nav>
             <div className='btn'>
-                <Link to={'/login'}>
+                <Link to="/authentication?type=homeAuth">
                     <Button
                         className="button"
                         text="Login"

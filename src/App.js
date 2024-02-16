@@ -8,8 +8,7 @@ import ComicDetails from './Pages/ComicDetails';
 import EventDetails from './Pages/EventDetails';
 import Header from './Components/Header'
 import Footer from './Components/Footer';
-import Register from './Components/AuthenticationPages/Register';
-import Login from './Components/AuthenticationPages/Login';
+import Authentication from './Components/Authentication';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
@@ -40,8 +39,7 @@ const App = () => {
           <Route path="/creator/:id" element={<CreatorDetails />} />
           <Route path="/comic/:id" element={<ComicDetails />} />
           <Route path="/event/:id" element={<EventDetails />} />
-          <Route path="/register" element={<Register type="Sign Up" />} />
-          <Route path="/login" element={<Login type="Login" />} />
+          <Route path="/authentication" element={<Authentication />} />
         </Routes>
         <Footer />
       </div>

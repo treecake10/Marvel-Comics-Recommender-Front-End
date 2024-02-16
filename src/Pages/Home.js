@@ -34,7 +34,7 @@ const Home = () => {
                 <div className="col">
                     <h2>Comics Just For You</h2>
                     <p>Sign in or create an account. Select your favorite characters, comics, series, events, and creators.<br/><br/>Get a recommended reading list tailored to your interests! </p>
-                    <Link to={'/register'}>
+                    <Link to="/authentication?type=getStarted">
                         <Button
                             className="button"
                             text="Get Started"

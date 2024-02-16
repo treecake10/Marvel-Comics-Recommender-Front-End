@@ -372,3 +372,8 @@
   cursor: pointer;
 }
 
+.gray {
+  background: #eaeaea;
+  color: #676767;
+}
+
