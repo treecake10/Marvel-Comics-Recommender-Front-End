@@ -9,7 +9,10 @@ import EventDetails from './Pages/EventDetails';
 import Header from './Components/Header'
 import Footer from './Components/Footer';
 import Authentication from './Components/Authentication';
+import { getUser } from './Components/State/Auth/Action';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as solidHeart} from '@fortawesome/free-solid-svg-icons';
@@ -19,7 +22,16 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 
+
 const App = () => {
+
+  const dispatch = useDispatch()
+  const jwt = localStorage.getItem("jwt")
+  const {auth} = useSelector(store=>store)
+
+  useEffect(()=> {
+    dispatch(getUser(auth.jwt || jwt))
+  }, [auth.jwt])
 
   library.add(faHeart, solidHeart);
   library.add(faStar, solidStar);

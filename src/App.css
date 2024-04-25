@@ -332,6 +332,10 @@
   .auth-input {
     width: 300px;
   }
+
+  .auth-switch-container {
+    width: 350px;
+  }
 }
 
 .auth-img {
@@ -360,13 +364,13 @@
   cursor: pointer;
 }
 
-.auth-submit-container {
+.auth-switch-container {
   display: flex;
   gap: 30px;
   margin: 60px auto;
 }
 
-.auth-submit {
+.auth-switch {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -374,6 +378,21 @@
   height: 59px;
   color: white;
   background: #F0131E;
+  border-radius: 50px;
+  font-size: 19px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-submit {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  height: 59px;
+  color: white;
+  background: #393939;
   border-radius: 50px;
   font-size: 19px;
   font-weight: 700;

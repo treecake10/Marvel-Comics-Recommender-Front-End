@@ -2,11 +2,29 @@ import { useState, useEffect } from 'react';
 import User from './Icons/User';
 import Envelope from './Icons/Envelope';
 import Lock from './Icons/Lock';
-import { useLocation } from 'react-router-dom';
+import Button from './Button'
+import { useDispatch } from 'react-redux';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { loginUser } from './State/Auth/Action'
 
 const Authentication = () => {
     const location = useLocation();
     const [action, setAction] = useState('');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const userData = {
+            email: email,
+            password: password
+        };
+        dispatch(loginUser({userData:userData, navigate}))
+    };
 
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
@@ -27,30 +45,31 @@ const Authentication = () => {
                     <div className="auth-text">{action}</div>
                 </div>
                 <div className="auth-inputs">
-                    {action==="Login"?<div></div>:<div className="auth-input">
+                    {action==="Login"? null : <div className="auth-input">
                         <div className="auth-img">
                             <User/>
                         </div>
-                        <input type="text" placeholder="Name"/>
+                        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
                     </div>}
                     
                     <div className="auth-input">
                         <div className="auth-img">
                             <Envelope/>
                         </div>
-                        <input type="email" placeholder="Email"/>
+                        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <div className="auth-input">
                         <div className="auth-img">
                             <Lock/>
                         </div>
-                        <input type="password" placeholder="Password"/>
+                        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
                 </div>
-                {action==="Sign Up"?<div></div>:<div className="forgot-password">Lost Password? <span>Click Here!</span></div>}
-                <div className="auth-submit-container">
-                    <div className={action==="Login"?"auth-submit gray":"auth-submit"} onClick={()=>{setAction("Sign Up")}}>Sign Up</div>
-                    <div className={action==="Sign Up"?"auth-submit gray":"auth-submit"} onClick={()=>{setAction("Login")}}>Login</div>
+                {action==="Sign Up"?<Button className={"auth-submit"} text={"Submit"}></Button>:<div className="forgot-password">Lost Password? <span>Click Here!</span></div>}
+                {action==="Login"?<Button className={"auth-submit"} text={"Submit"} handleClick={handleSubmit}></Button> : null}
+                <div className="auth-switch-container">
+                    <div className={action==="Login"?"auth-switch gray":"auth-switch"} onClick={()=>{setAction("Sign Up")}}>Sign Up</div>
+                    <div className={action==="Sign Up"?"auth-switch gray":"auth-switch"} onClick={()=>{setAction("Login")}}>Login</div>
                 </div>
             </div>
         </div>
