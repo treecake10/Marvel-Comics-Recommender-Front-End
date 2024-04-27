@@ -1,13 +1,23 @@
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from "./Button";
 import MarvelLogo from '../Images/Marvel_Logo.svg.png';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../Components/State/Auth/Action';
 
-const Header = () => {
+const Header = ({ isAuthenticated }) => {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    // const { auth } = useSelector(store => store);
 
     const navigateToHome = () => {
         navigate('/');
+    };
+
+    const handleLogout = (e) => {
+        e.preventDefault();
+        dispatch(logout());
     };
 
     return(
@@ -25,14 +35,21 @@ const Header = () => {
                 </ul>
             </nav>
             <div className='btn'>
-                <Link to="/authentication?type=homeAuth">
+                {isAuthenticated ? (
                     <Button
                         className="button"
-                        text="Login"
+                        text="Logout"
+                        handleClick={handleLogout}
                     />
-                </Link>
+                ) : (
+                    <Link to="/authentication?type=homeAuth">
+                        <Button
+                            className="button"
+                            text="Login"
+                        />
+                    </Link>
+                )}
             </div>
-            
         </div>
     )
 }

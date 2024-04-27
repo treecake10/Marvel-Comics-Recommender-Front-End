@@ -1,4 +1,4 @@
-import { GET_USER_REQUEST, LOGIN_REQUEST, LOGIN_SUCCESS, REGISTER_REQUEST, REGISTER_SUCCESS } from "./ActionType";
+import { GET_USER_REQUEST, LOGIN_REQUEST, LOGIN_SUCCESS, REGISTER_REQUEST, REGISTER_SUCCESS, LOGOUT } from "./ActionType";
 
 const initialState={
 
@@ -19,7 +19,10 @@ export const authReducer = (state=initialState, action) => {
         
         case REGISTER_SUCCESS:
         case LOGIN_SUCCESS:
-            return {...state, isLoading:false, jwt:action.payload, success:"Register Successful"}
+            return {...state, isLoading:false, jwt:action.payload, success:"Login Successful"}
+
+        case LOGOUT:
+            return initialState;
 
         default:
             return state;

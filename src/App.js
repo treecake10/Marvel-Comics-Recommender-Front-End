@@ -31,6 +31,7 @@ const App = () => {
 
   useEffect(()=> {
     dispatch(getUser(auth.jwt || jwt))
+    console.log(auth.success)
   }, [auth.jwt])
 
   library.add(faHeart, solidHeart);
@@ -42,7 +43,7 @@ const App = () => {
   return (
     <Router>
       <div>
-        <Header />
+        <Header isAuthenticated={auth.success}/>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
