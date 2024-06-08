@@ -1,4 +1,4 @@
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE, REGISTER_REQUEST, REGISTER_SUCCESS, LOGOUT, REGISTER_FAILURE, GET_USER_REQUEST, GET_USER_FAILURE} from "./ActionType"
+import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE, REGISTER_REQUEST, REGISTER_SUCCESS, LOGOUT, REGISTER_FAILURE, GET_USER_REQUEST, GET_USER_FAILURE, ADD_TO_LIKED_CHARACTERS_SUCCESS, ADD_TO_LIKED_CHARACTERS_REQUEST} from "./ActionType"
 import { API_URL, api } from "../../config/api"
 
 export const registerUser=(reqData)=>async(dispatch)=>{
@@ -8,6 +8,7 @@ export const registerUser=(reqData)=>async(dispatch)=>{
         if (data.jwt) {
             localStorage.setItem("jwt", data.jwt);
         }
+        reqData.navigate("/")
         dispatch({type:REGISTER_SUCCESS, payload:data.jwt})
         console.log("register success", data)
     } catch (error) {
@@ -62,4 +63,25 @@ export const logout=()=>async(dispatch)=>{
         console.log("error", error)
     }
 
+}
+
+export const addToLikes=({categoryId, jwt})=>async(dispatch)=>{
+    dispatch({type:ADD_TO_LIKED_CHARACTERS_REQUEST})
+    try {
+        const res = await api.post(`/api/users/like`,
+            {
+                itemId: categoryId,
+                itemType: 'character'
+                
+            },{
+            headers:{
+                Authorization:`Bearer ${jwt}`
+            }
+        })
+        dispatch({type:ADD_TO_LIKED_CHARACTERS_SUCCESS, payload:res.data})
+        console.log("liked data: ", res.data)
+    } catch (error) {
+        
+        console.log("error", error)
+    }
 }

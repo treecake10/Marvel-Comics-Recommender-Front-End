@@ -1,4 +1,5 @@
-import { GET_USER_REQUEST, LOGIN_REQUEST, LOGIN_SUCCESS, REGISTER_REQUEST, REGISTER_SUCCESS, LOGOUT } from "./ActionType";
+import { isPresentInCharacterLikes } from "../../config/logic";
+import { GET_USER_REQUEST, LOGIN_REQUEST, LOGIN_SUCCESS, REGISTER_REQUEST, REGISTER_SUCCESS, ADD_TO_LIKED_CHARACTERS_SUCCESS, LOGOUT } from "./ActionType";
 
 const initialState={
 
@@ -6,7 +7,7 @@ const initialState={
     isLoading:false,
     error:null,
     jwt:null,
-    favorites:[],
+    likes:[],
     success:null
 
 }
@@ -20,6 +21,16 @@ export const authReducer = (state=initialState, action) => {
         case REGISTER_SUCCESS:
         case LOGIN_SUCCESS:
             return {...state, isLoading:false, jwt:action.payload, success:"Login Successful"}
+
+        case ADD_TO_LIKED_CHARACTERS_SUCCESS:
+            return {
+                ...state,
+                isLoading:false,
+                error:null,
+                likes:isPresentInCharacterLikes(state.likes, action.payload)
+                ? state.likes.filter((item)=>item.id!==action.payload.id)
+                :[action.payload,...state.likes]
+            }
 
         case LOGOUT:
             return initialState;

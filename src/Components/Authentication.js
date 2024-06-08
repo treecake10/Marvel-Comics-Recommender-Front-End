@@ -5,7 +5,7 @@ import Lock from './Icons/Lock';
 import Button from './Button'
 import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { loginUser } from './State/Auth/Action'
+import { loginUser, registerUser } from './State/Auth/Action'
 
 const Authentication = () => {
     const location = useLocation();
@@ -17,13 +17,24 @@ const Authentication = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const handleSubmit = (e) => {
+    const handleLoginSubmit = (e) => {
         e.preventDefault();
         const userData = {
             email: email,
             password: password
         };
         dispatch(loginUser({userData:userData, navigate}))
+    };
+
+    const handleRegisterSubmit = (e) => {
+        e.preventDefault();
+        const userData = {
+            fullName: name,
+            email: email,
+            password: password,
+            role: "ROLE_CUSTOMER"
+        };
+        dispatch(registerUser({userData:userData, navigate}))
     };
 
     useEffect(() => {
@@ -65,8 +76,8 @@ const Authentication = () => {
                         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
                 </div>
-                {action==="Sign Up"?<Button className={"auth-submit"} text={"Submit"}></Button>:<div className="forgot-password">Lost Password? <span>Click Here!</span></div>}
-                {action==="Login"?<Button className={"auth-submit"} text={"Submit"} handleClick={handleSubmit}></Button> : null}
+                {action==="Sign Up"?<Button className={"auth-submit"} text={"Submit"} handleClick={handleRegisterSubmit}></Button>:<div className="forgot-password">Lost Password? <span>Click Here!</span></div>}
+                {action==="Login"?<Button className={"auth-submit"} text={"Submit"} handleClick={handleLoginSubmit}></Button> : null}
                 <div className="auth-switch-container">
                     <div className={action==="Login"?"auth-switch gray":"auth-switch"} onClick={()=>{setAction("Sign Up")}}>Sign Up</div>
                     <div className={action==="Sign Up"?"auth-switch gray":"auth-switch"} onClick={()=>{setAction("Login")}}>Login</div>

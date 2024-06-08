@@ -4,7 +4,7 @@ import { fetchCharacterById } from "../libs/utils";
 import Like from "../Components/Icons/Like";
 import Favorite from "../Components/Icons/Favorite";
 
-const CharacterDetails = () => {
+const CharacterDetails = ({ isAuthenticated }) => {
 
     const { id } = useParams();
 
@@ -42,13 +42,26 @@ const CharacterDetails = () => {
                         ) : <p>Not Found</p>}
                         <br />
                         <div className="right-side">
-                            <Link to="/authentication?type=detailsPage" className="link-style">
-                                <Like/>
-                            </Link>
+
+                            {isAuthenticated ? (
+                                <Like catId={id}/>
+                            ) : (
+                                <Link to="/authentication?type=detailsPage" className="link-style">
+                                    <Like catId={id}/>
+                                </Link>
+                            )}
+                            
                             <div className="middle-column-spacing"></div>
-                            <Link to="/authentication?type=detailsPage" className="link-style">
+
+
+                            {isAuthenticated ? (
                                 <Favorite/>
-                            </Link>
+                            ) : (
+                                <Link to="/authentication?type=detailsPage" className="link-style">
+                                    <Favorite/>
+                                </Link>
+                            )}
+                            
                         </div> 
                     </div>
                 </div>
