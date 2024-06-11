@@ -1,10 +1,24 @@
 import { isPresentInCharacterLikes } from "../../config/logic";
-import { GET_USER_REQUEST, LOGIN_REQUEST, LOGIN_SUCCESS, REGISTER_REQUEST, REGISTER_SUCCESS, ADD_TO_LIKED_CHARACTERS_SUCCESS, LOGOUT } from "./ActionType";
+import { 
+    GET_USER_REQUEST, 
+    LOGIN_REQUEST, 
+    LOGIN_SUCCESS, 
+    REGISTER_REQUEST, 
+    REGISTER_SUCCESS, 
+    ADD_TO_LIKED_CHARACTERS_SUCCESS, 
+    LOGOUT,
+    CHECK_ITEM_LIKED_REQUEST, 
+    CHECK_ITEM_LIKED_SUCCESS, 
+    CHECK_ITEM_LIKED_FAILURE,
+    UNLIKE_ITEM_SUCCESS, 
+    UNLIKE_ITEM_FAILURE
+} from "./ActionType";
 
 const initialState={
 
     user:null,
     isLoading:false,
+    isLiked:false,
     error:null,
     jwt:null,
     likes:[],
@@ -31,6 +45,19 @@ export const authReducer = (state=initialState, action) => {
                 ? state.likes.filter((item)=>item.id!==action.payload.id)
                 :[action.payload,...state.likes]
             }
+
+        case CHECK_ITEM_LIKED_REQUEST:
+            return { ...state, isLoading: true, error: null };
+        case CHECK_ITEM_LIKED_SUCCESS:
+            return { ...state, isLoading: false, isLiked: action.payload };
+        case CHECK_ITEM_LIKED_FAILURE:
+            return { ...state, isLoading: false, error: action.payload };
+
+        case UNLIKE_ITEM_SUCCESS:
+            return { ...state, isLiked: false, likes: state.likes.filter(item => item.id !== action.payload) };
+
+        case UNLIKE_ITEM_FAILURE:
+            return { ...state, error: action.payload };
 
         case LOGOUT:
             return initialState;

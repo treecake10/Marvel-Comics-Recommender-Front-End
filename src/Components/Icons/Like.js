@@ -3,22 +3,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as solidHeart} from '@fortawesome/free-solid-svg-icons';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { addToLikes } from '../State/Auth/Action'
+import { addToLikes, unlikeItem } from '../State/Auth/Action'
 
-const Like = ({ catId }) => {
+const Like = ({ itemId, itemType, itemName, likedBool }) => {
 
-    const [isLiked, setLiked] = useState(false);
-
-    const navigate = useNavigate()
+    const [isLiked, setLiked] = useState(likedBool);
     const dispatch = useDispatch()
     const jwt = localStorage.getItem("jwt")
 
     const handleLikeIconClick = () => {
         setLiked(!isLiked);
+
+        if (isLiked) {
+            dispatch(unlikeItem({itemId, jwt}))
+        } else {
+            dispatch(addToLikes({itemId, itemType, itemName, jwt}))
+        }
         
-        dispatch(addToLikes({categoryId:catId, jwt}))
-        console.log(catId)
+        console.log(itemId)
       };
 
     return(

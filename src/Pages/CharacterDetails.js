@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { checkIfItemLiked } from '../Components/State/Auth/Action';
 import { fetchCharacterById } from "../libs/utils";
 import Like from "../Components/Icons/Like";
 import Favorite from "../Components/Icons/Favorite";
@@ -7,6 +9,10 @@ import Favorite from "../Components/Icons/Favorite";
 const CharacterDetails = ({ isAuthenticated }) => {
 
     const { id } = useParams();
+    const dispatch = useDispatch();
+    const jwt = localStorage.getItem("jwt");
+
+    const isLiked = useSelector(state => state.auth.isLiked);
 
     const [character, setCharacter] = useState(null);
 
@@ -23,6 +29,13 @@ const CharacterDetails = ({ isAuthenticated }) => {
         fetchCharacterDetails();
 
     }, [id]);
+
+    useEffect(() => {
+
+        dispatch(checkIfItemLiked(id, jwt));
+
+    }, [dispatch, id, jwt])
+
 
     if (!character) return null;
 
@@ -44,10 +57,10 @@ const CharacterDetails = ({ isAuthenticated }) => {
                         <div className="right-side">
 
                             {isAuthenticated ? (
-                                <Like catId={id}/>
+                                <Like itemId={id} itemType={'character'} itemName={character.name} likedBool={isLiked}/>
                             ) : (
                                 <Link to="/authentication?type=detailsPage" className="link-style">
-                                    <Like catId={id}/>
+                                    <Like itemId={id} itemType={'character'} itemName={character.name} likedBool={isLiked}/>
                                 </Link>
                             )}
                             
