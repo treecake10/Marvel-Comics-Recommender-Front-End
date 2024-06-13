@@ -48,7 +48,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/character/:id" element={<CharacterDetails isAuthenticated={auth.success}/>} />
-          <Route path="/series/:id" element={<SeriesDetails />} />
+          <Route path="/series/:id" element={<SeriesDetails isAuthenticated={auth.success}/>} />
           <Route path="/creator/:id" element={<CreatorDetails />} />
           <Route path="/comic/:id" element={<ComicDetails />} />
           <Route path="/event/:id" element={<EventDetails />} />

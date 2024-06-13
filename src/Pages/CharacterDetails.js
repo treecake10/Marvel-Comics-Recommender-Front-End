@@ -32,7 +32,7 @@ const CharacterDetails = ({ isAuthenticated }) => {
 
     useEffect(() => {
 
-        dispatch(checkIfItemLiked(id, jwt));
+        dispatch(checkIfItemLiked(id, 'character', jwt));
 
     }, [dispatch, id, jwt])
 
@@ -60,7 +60,7 @@ const CharacterDetails = ({ isAuthenticated }) => {
                                 <Like itemId={id} itemType={'character'} itemName={character.name} likedBool={isLiked}/>
                             ) : (
                                 <Link to="/authentication?type=detailsPage" className="link-style">
-                                    <Like itemId={id} itemType={'character'} itemName={character.name} likedBool={isLiked}/>
+                                    <Like />
                                 </Link>
                             )}
                             

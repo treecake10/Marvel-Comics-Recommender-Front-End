@@ -10,6 +10,8 @@ import {
     GET_USER_FAILURE, 
     ADD_TO_LIKED_CHARACTERS_SUCCESS, 
     ADD_TO_LIKED_CHARACTERS_REQUEST,
+    ADD_TO_LIKED_SERIES_SUCCESS,
+    ADD_TO_LIKED_SERIES_REQUEST,
     CHECK_ITEM_LIKED_REQUEST, 
     CHECK_ITEM_LIKED_SUCCESS, 
     CHECK_ITEM_LIKED_FAILURE,
@@ -82,7 +84,7 @@ export const logout=()=>async(dispatch)=>{
 
 }
 
-export const addToLikes=({itemId, itemType, itemName, jwt})=>async(dispatch)=>{
+export const addToCharacterLikes=({itemId, itemType, itemName, jwt})=>async(dispatch)=>{
     dispatch({type:ADD_TO_LIKED_CHARACTERS_REQUEST})
     try {
         const res = await api.post(`/api/users/like`,
@@ -103,12 +105,33 @@ export const addToLikes=({itemId, itemType, itemName, jwt})=>async(dispatch)=>{
     }
 }
 
-export const checkIfItemLiked = (itemId, jwt) => async (dispatch) => {
+export const addToSeriesLikes=({itemId, itemType, itemName, jwt})=>async(dispatch)=>{
+    dispatch({type:ADD_TO_LIKED_SERIES_REQUEST})
+    try {
+        const res = await api.post(`/api/users/like`,
+            {
+                itemId: itemId,
+                itemType: itemType,
+                itemName: itemName
+            },{
+            headers:{
+                Authorization:`Bearer ${jwt}`
+            }
+        })
+        dispatch({type:ADD_TO_LIKED_SERIES_SUCCESS, payload:res.data})
+        console.log("liked data: ", res.data)
+    } catch (error) {
+        
+        console.log("error", error)
+    }
+}
+
+export const checkIfItemLiked = (itemId, itemType, jwt) => async (dispatch) => {
     dispatch({ type: CHECK_ITEM_LIKED_REQUEST });
 
     try {
         const response = await api.get(`/api/users/itemIsLiked`, {
-            params: { itemId, itemType: 'character' },
+            params: { itemId, itemType },
             headers: { Authorization: `Bearer ${jwt}` }
         });
 
@@ -120,10 +143,10 @@ export const checkIfItemLiked = (itemId, jwt) => async (dispatch) => {
     }
 };
 
-export const unlikeItem = ({itemId, jwt}) => async (dispatch) => {
+export const unlikeItem = ({itemId, itemType, jwt}) => async (dispatch) => {
     try {
         const res = await api.delete(`/api/users/unlike`, {
-            data: { itemId, itemType: 'character' },
+            data: { itemId, itemType },
             headers: { Authorization: `Bearer ${jwt}` },
         });
             

@@ -1,4 +1,4 @@
-import { isPresentInCharacterLikes } from "../../config/logic";
+import { isPresentInCharacterLikes, isPresentInSeriesLikes } from "../../config/logic";
 import { 
     GET_USER_REQUEST, 
     LOGIN_REQUEST, 
@@ -6,6 +6,7 @@ import {
     REGISTER_REQUEST, 
     REGISTER_SUCCESS, 
     ADD_TO_LIKED_CHARACTERS_SUCCESS, 
+    ADD_TO_LIKED_SERIES_SUCCESS,
     LOGOUT,
     CHECK_ITEM_LIKED_REQUEST, 
     CHECK_ITEM_LIKED_SUCCESS, 
@@ -34,8 +35,17 @@ export const authReducer = (state=initialState, action) => {
         
         case REGISTER_SUCCESS:
         case LOGIN_SUCCESS:
-            return {...state, isLoading:false, jwt:action.payload, success:"Login Successful"}
+            return {...state, isLoading:false, jwt:action.payload, success:"Login Successful"};
 
+        case ADD_TO_LIKED_SERIES_SUCCESS:
+            return {
+                ...state,
+                isLoading:false,
+                error:null,
+                likes:isPresentInSeriesLikes(state.likes, action.payload)
+                ? state.likes.filter((item)=>item.id!==action.payload.id)
+                :[action.payload,...state.likes]
+            }
         case ADD_TO_LIKED_CHARACTERS_SUCCESS:
             return {
                 ...state,

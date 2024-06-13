@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as solidHeart} from '@fortawesome/free-solid-svg-icons';
 import { useDispatch } from 'react-redux';
-import { addToLikes, unlikeItem } from '../State/Auth/Action'
+import { addToCharacterLikes, addToSeriesLikes, unlikeItem } from '../State/Auth/Action'
 
 const Like = ({ itemId, itemType, itemName, likedBool }) => {
 
@@ -15,9 +15,20 @@ const Like = ({ itemId, itemType, itemName, likedBool }) => {
         setLiked(!isLiked);
 
         if (isLiked) {
-            dispatch(unlikeItem({itemId, jwt}))
+
+            dispatch(unlikeItem({itemId, itemType, jwt}));
+            
         } else {
-            dispatch(addToLikes({itemId, itemType, itemName, jwt}))
+            switch (itemType) {
+                case 'character':
+                    dispatch(addToCharacterLikes({itemId, itemType, itemName, jwt}));
+                    break;
+                case 'series':
+                    dispatch(addToSeriesLikes({itemId, itemType, itemName, jwt}));
+                default:
+                    console.error(`Unknown item type: ${itemType}`);
+            }
+            
         }
         
         console.log(itemId)

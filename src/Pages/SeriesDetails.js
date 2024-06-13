@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useReducer } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { checkIfItemLiked } from '../Components/State/Auth/Action';
 import {
   fetchSeriesById,
   fetchComicsBySeriesId,
@@ -41,10 +43,15 @@ const reducer = (state, action) => {
     }
 };
 
-const SeriesDetails = () => {
+const SeriesDetails = ({ isAuthenticated }) => {
+
   const { id } = useParams();
   const [state, dispatch] = useReducer(reducer, initialState);
   const { comics, characters, events, creators, loadings } = state;
+
+  const jwt = localStorage.getItem("jwt");
+  const dispatchCheckLikedItem = useDispatch();
+  const isLiked = useSelector(state => state.auth.isLiked);
     
   const fetchListData = async (fetchFunction, listType, availability) => {
     try {
@@ -60,6 +67,12 @@ const SeriesDetails = () => {
       dispatch({ type: SET_LOADING, listType, value: false });
     }
   };
+
+  useEffect(() => {
+
+    dispatchCheckLikedItem(checkIfItemLiked(id, 'series', jwt));
+
+  }, [dispatchCheckLikedItem, id, jwt])
 
   useEffect(() => {
     const fetchSeriesDetails = async () => {
@@ -110,10 +123,17 @@ const SeriesDetails = () => {
               {description ? <p>{description}</p> : <p>Not Found</p>}
               <br />
               <div className="contents__arrangement">
-                <Link to="/authentication?type=detailsPage" className="link-style">
-                  <Like />
-                </Link>
+                
+                {isAuthenticated ? (
+                    <Like itemId={id} itemType={'series'} itemName={title} likedBool={isLiked}/>
+                ) : (
+                    <Link to="/authentication?type=detailsPage" className="link-style">
+                        <Like />
+                    </Link>
+                )}
+
                 <div className="middle-column-spacing"></div>
+
                 <Link to="/authentication?type=detailsPage" className="link-style">
                   <Favorite />
                 </Link>
