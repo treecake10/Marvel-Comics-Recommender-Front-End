@@ -49,9 +49,9 @@ const App = () => {
           <Route path="/explore" element={<Explore />} />
           <Route path="/character/:id" element={<CharacterDetails isAuthenticated={auth.success}/>} />
           <Route path="/series/:id" element={<SeriesDetails isAuthenticated={auth.success}/>} />
-          <Route path="/creator/:id" element={<CreatorDetails />} />
-          <Route path="/comic/:id" element={<ComicDetails />} />
-          <Route path="/event/:id" element={<EventDetails />} />
+          <Route path="/creator/:id" element={<CreatorDetails isAuthenticated={auth.success} />} />
+          <Route path="/comic/:id" element={<ComicDetails isAuthenticated={auth.success} />} />
+          <Route path="/event/:id" element={<EventDetails isAuthenticated={auth.success} />} />
           <Route path="/authentication" element={<Authentication />} />
         </Routes>
         <Footer />

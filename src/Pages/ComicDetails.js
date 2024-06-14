@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { checkIfItemLiked } from '../Components/State/Auth/Action';
 import {
     fetchComicById,
     fetchCharactersByComicId,
@@ -10,9 +12,13 @@ import DataList from "../Components/DataList";
 import Like from "../Components/Icons/Like";
 import Favorite from "../Components/Icons/Favorite";
 
-const ComicDetails = () => {
+const ComicDetails = ({ isAuthenticated }) => {
     const { id } = useParams();
     const [comic, setComic] = useState(null);
+
+    const jwt = localStorage.getItem("jwt");
+    const dispatchCheckLikedItem = useDispatch();
+    const isLiked = useSelector(state => state.auth.isLiked);
 
     const [data, setData] = useState({
         events: [],
@@ -64,9 +70,15 @@ const ComicDetails = () => {
     };
 
     useEffect(() => {
+
+        dispatchCheckLikedItem(checkIfItemLiked(id, 'comic', jwt));
+     
+    }, [dispatchCheckLikedItem, id, jwt])
+
+    useEffect(() => {
         fetchListData(fetchCreatorsByComicId, 'creators');
         fetchListData(fetchCharactersByComicId, 'characters');
-    }, [id, comic]);
+    }, [comic]);
 
     const memoizedDataSearchFetcher = useMemo(() => DataSearchFetcher, []);
 
@@ -94,9 +106,13 @@ const ComicDetails = () => {
                             <br />
                             <br />
                             <div className="contents__arrangement">
-                                <Link to="/authentication?type=detailsPage" className="link-style">
-                                    <Like />
-                                </Link>
+                                {isAuthenticated ? (
+                                    <Like itemId={id} itemType={'comic'} itemName={title} likedBool={isLiked}/>
+                                ) : (
+                                    <Link to="/authentication?type=detailsPage" className="link-style">
+                                        <Like />
+                                    </Link>
+                                )}
                                 <div className="middle-column-spacing"></div>
                                 <Link to="/authentication?type=detailsPage" className="link-style">
                                     <Favorite />

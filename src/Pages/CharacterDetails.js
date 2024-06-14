@@ -13,7 +13,6 @@ const CharacterDetails = ({ isAuthenticated }) => {
     const jwt = localStorage.getItem("jwt");
 
     const isLiked = useSelector(state => state.auth.isLiked);
-
     const [character, setCharacter] = useState(null);
 
     useEffect(() => {

@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useReducer } from 'react';
 import { useParams, Link } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { checkIfItemLiked } from '../Components/State/Auth/Action';
 import {
     fetchEventById,
     fetchEventByName,
@@ -46,14 +48,19 @@ const reducer = (state, action) => {
     }
 };
 
-const EventDetails = () => {
+const EventDetails = ({ isAuthenticated }) => {
     const { id } = useParams();
     const [state, dispatch] = useReducer(reducer, initialState);
 
     const { series, comics, creators, characters, prevEvent, nextEvent, loadings } = state;
 
+    const jwt = localStorage.getItem("jwt");
+    const dispatchCheckLikedItem = useDispatch();
+    const isLiked = useSelector(state => state.auth.isLiked);
+
     useEffect(() => {
         const fetchEventDetails = async () => {
+            dispatch({ type: SET_LIST, listType: 'event', result: null });
             dispatch({ type: SET_LIST, listType: 'prevEvent', result: [] });
             dispatch({ type: SET_LIST, listType: 'nextEvent', result: [] });
     
@@ -102,6 +109,12 @@ const EventDetails = () => {
     };
 
     useEffect(() => {
+
+       dispatchCheckLikedItem(checkIfItemLiked(id, 'event', jwt));
+    
+    }, [dispatchCheckLikedItem, id, jwt])
+
+    useEffect(() => {
         if (state.event) {
             const { series, comics, characters, creators } = state.event;
             fetchListData(fetchSeriesByEventId, 'series', series?.available);
@@ -109,7 +122,7 @@ const EventDetails = () => {
             fetchListData(fetchCharactersByEventId, 'characters', characters?.available);
             fetchListData(fetchCreatorsByEventId, 'creators', creators?.available);
         }
-    }, [id, state.event]);
+    }, [state.event]);
 
     // Memoize the reversedComics array to avoid recomputing it on each render
     const memoizedSeries = useMemo(() => series, [series]);
@@ -141,9 +154,13 @@ const EventDetails = () => {
                             <DataList array={nextEvent} listName="Next Event" loading={loadings.nextEvent}/>
                             <br />
                             <div className="contents__arrangement">
-                                <Link to="/authentication?type=detailsPage" className="link-style">
-                                    <Like />
-                                </Link>
+                                {isAuthenticated ? (
+                                    <Like itemId={id} itemType={'event'} itemName={title} likedBool={isLiked}/>
+                                ) : (
+                                    <Link to="/authentication?type=detailsPage" className="link-style">
+                                        <Like />
+                                    </Link>
+                                )}
                                 <div className="middle-column-spacing"></div>
                                 <Link to="/authentication?type=detailsPage" className="link-style">
                                     <Favorite />

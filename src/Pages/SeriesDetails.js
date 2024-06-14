@@ -95,7 +95,7 @@ const SeriesDetails = ({ isAuthenticated }) => {
       fetchListData(fetchCreatorsBySeriesId, 'creators', creators?.available);
       fetchListData(fetchEventsBySeriesId, 'events', events?.available);
     }
-  }, [id, state.series]);
+  }, [state.series]);
 
   // Memoize the reversedComics array to avoid recomputing it on each render
   const reversedComics = useMemo(() => (comics ? [...comics].reverse() : null), [comics]);
