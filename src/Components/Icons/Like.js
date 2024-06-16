@@ -20,6 +20,7 @@ const Like = ({ itemId, itemType, itemName, likedBool }) => {
     const jwt = localStorage.getItem("jwt")
 
     const handleLikeIconClick = () => {
+        
         setLiked(!isLiked);
 
         if (isLiked) {
@@ -46,7 +47,7 @@ const Like = ({ itemId, itemType, itemName, likedBool }) => {
         }
         
         console.log(itemId)
-      };
+    };
 
     return(
         <div className="icon-container">

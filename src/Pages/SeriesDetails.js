@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useReducer } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { checkIfItemLiked } from '../Components/State/Auth/Action';
+import { checkIfItemLiked, checkIfItemFavorited } from '../Components/State/Auth/Action';
 import {
   fetchSeriesById,
   fetchComicsBySeriesId,
@@ -46,12 +46,14 @@ const reducer = (state, action) => {
 const SeriesDetails = ({ isAuthenticated }) => {
 
   const { id } = useParams();
+  const dispatchCheckItem = useDispatch();
+  const jwt = localStorage.getItem("jwt");
+
+  const isLiked = useSelector(state => state.auth.isLiked);
+  const isFavorited = useSelector(state => state.auth.isFavorited);
+
   const [state, dispatch] = useReducer(reducer, initialState);
   const { comics, characters, events, creators, loadings } = state;
-
-  const jwt = localStorage.getItem("jwt");
-  const dispatchCheckLikedItem = useDispatch();
-  const isLiked = useSelector(state => state.auth.isLiked);
     
   const fetchListData = async (fetchFunction, listType, availability) => {
     try {
@@ -70,9 +72,10 @@ const SeriesDetails = ({ isAuthenticated }) => {
 
   useEffect(() => {
 
-    dispatchCheckLikedItem(checkIfItemLiked(id, 'series', jwt));
+    dispatchCheckItem(checkIfItemLiked(id, 'series', jwt));
+    dispatchCheckItem(checkIfItemFavorited(id, 'series', jwt));
 
-  }, [dispatchCheckLikedItem, id, jwt])
+  }, [dispatchCheckItem, id, jwt])
 
   useEffect(() => {
     const fetchSeriesDetails = async () => {
@@ -134,9 +137,14 @@ const SeriesDetails = ({ isAuthenticated }) => {
 
                 <div className="middle-column-spacing"></div>
 
-                <Link to="/authentication?type=detailsPage" className="link-style">
-                  <Favorite />
-                </Link>
+                {isAuthenticated ? (
+                    <Favorite itemId={id} itemType={'series'} itemName={title} favoritedBool={isFavorited}/>
+                ) : (
+                    <Link to="/authentication?type=detailsPage" className="link-style">
+                        <Favorite />
+                    </Link>
+                )}
+
               </div>
             </div>
           </div>

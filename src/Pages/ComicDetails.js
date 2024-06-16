@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { checkIfItemLiked } from '../Components/State/Auth/Action';
+import { checkIfItemLiked, checkIfItemFavorited } from '../Components/State/Auth/Action';
 import {
     fetchComicById,
     fetchCharactersByComicId,
@@ -13,12 +13,15 @@ import Like from "../Components/Icons/Like";
 import Favorite from "../Components/Icons/Favorite";
 
 const ComicDetails = ({ isAuthenticated }) => {
-    const { id } = useParams();
-    const [comic, setComic] = useState(null);
 
+    const { id } = useParams();
+    const dispatch = useDispatch();
     const jwt = localStorage.getItem("jwt");
-    const dispatchCheckLikedItem = useDispatch();
+
     const isLiked = useSelector(state => state.auth.isLiked);
+    const isFavorited = useSelector(state => state.auth.isFavorited);
+
+    const [comic, setComic] = useState(null);
 
     const [data, setData] = useState({
         events: [],
@@ -71,9 +74,10 @@ const ComicDetails = ({ isAuthenticated }) => {
 
     useEffect(() => {
 
-        dispatchCheckLikedItem(checkIfItemLiked(id, 'comic', jwt));
+        dispatch(checkIfItemLiked(id, 'comic', jwt));
+        dispatch(checkIfItemFavorited(id, 'comic', jwt));
      
-    }, [dispatchCheckLikedItem, id, jwt])
+    }, [dispatch, id, jwt])
 
     useEffect(() => {
         fetchListData(fetchCreatorsByComicId, 'creators');
@@ -106,6 +110,7 @@ const ComicDetails = ({ isAuthenticated }) => {
                             <br />
                             <br />
                             <div className="contents__arrangement">
+
                                 {isAuthenticated ? (
                                     <Like itemId={id} itemType={'comic'} itemName={title} likedBool={isLiked}/>
                                 ) : (
@@ -113,10 +118,17 @@ const ComicDetails = ({ isAuthenticated }) => {
                                         <Like />
                                     </Link>
                                 )}
+
                                 <div className="middle-column-spacing"></div>
-                                <Link to="/authentication?type=detailsPage" className="link-style">
-                                    <Favorite />
-                                </Link>
+
+                                {isAuthenticated ? (
+                                    <Favorite itemId={id} itemType={'comic'} itemName={title} favoritedBool={isFavorited}/>
+                                ) : (
+                                    <Link to="/authentication?type=detailsPage" className="link-style">
+                                        <Favorite />
+                                    </Link>
+                                )}
+
                             </div>
                         </div>
                     </div>

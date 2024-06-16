@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { checkIfItemLiked } from '../Components/State/Auth/Action';
+import { checkIfItemLiked, checkIfItemFavorited } from '../Components/State/Auth/Action';
 import { fetchCharacterById } from "../libs/utils";
 import Like from "../Components/Icons/Like";
 import Favorite from "../Components/Icons/Favorite";
@@ -13,6 +13,8 @@ const CharacterDetails = ({ isAuthenticated }) => {
     const jwt = localStorage.getItem("jwt");
 
     const isLiked = useSelector(state => state.auth.isLiked);
+    const isFavorited = useSelector(state => state.auth.isFavorited);
+
     const [character, setCharacter] = useState(null);
 
     useEffect(() => {
@@ -32,6 +34,7 @@ const CharacterDetails = ({ isAuthenticated }) => {
     useEffect(() => {
 
         dispatch(checkIfItemLiked(id, 'character', jwt));
+        dispatch(checkIfItemFavorited(id, 'character', jwt));
 
     }, [dispatch, id, jwt])
 
@@ -65,9 +68,8 @@ const CharacterDetails = ({ isAuthenticated }) => {
                             
                             <div className="middle-column-spacing"></div>
 
-
                             {isAuthenticated ? (
-                                <Favorite/>
+                                <Favorite itemId={id} itemType={'character'} itemName={character.name} favoritedBool={isFavorited}/>
                             ) : (
                                 <Link to="/authentication?type=detailsPage" className="link-style">
                                     <Favorite/>

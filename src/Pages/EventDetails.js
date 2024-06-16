@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useReducer } from 'react';
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { checkIfItemLiked } from '../Components/State/Auth/Action';
+import { checkIfItemLiked, checkIfItemFavorited } from '../Components/State/Auth/Action';
 import {
     fetchEventById,
     fetchEventByName,
@@ -49,14 +49,16 @@ const reducer = (state, action) => {
 };
 
 const EventDetails = ({ isAuthenticated }) => {
+
     const { id } = useParams();
-    const [state, dispatch] = useReducer(reducer, initialState);
-
-    const { series, comics, creators, characters, prevEvent, nextEvent, loadings } = state;
-
+    const dispatchCheckItem = useDispatch();
     const jwt = localStorage.getItem("jwt");
-    const dispatchCheckLikedItem = useDispatch();
+
     const isLiked = useSelector(state => state.auth.isLiked);
+    const isFavorited = useSelector(state => state.auth.isFavorited);
+
+    const [state, dispatch] = useReducer(reducer, initialState);
+    const { series, comics, creators, characters, prevEvent, nextEvent, loadings } = state;
 
     useEffect(() => {
         const fetchEventDetails = async () => {
@@ -110,9 +112,10 @@ const EventDetails = ({ isAuthenticated }) => {
 
     useEffect(() => {
 
-       dispatchCheckLikedItem(checkIfItemLiked(id, 'event', jwt));
+       dispatchCheckItem(checkIfItemLiked(id, 'event', jwt));
+       dispatchCheckItem(checkIfItemFavorited(id, 'event', jwt));
     
-    }, [dispatchCheckLikedItem, id, jwt])
+    }, [dispatchCheckItem, id, jwt])
 
     useEffect(() => {
         if (state.event) {
@@ -154,6 +157,7 @@ const EventDetails = ({ isAuthenticated }) => {
                             <DataList array={nextEvent} listName="Next Event" loading={loadings.nextEvent}/>
                             <br />
                             <div className="contents__arrangement">
+
                                 {isAuthenticated ? (
                                     <Like itemId={id} itemType={'event'} itemName={title} likedBool={isLiked}/>
                                 ) : (
@@ -161,10 +165,17 @@ const EventDetails = ({ isAuthenticated }) => {
                                         <Like />
                                     </Link>
                                 )}
+
                                 <div className="middle-column-spacing"></div>
-                                <Link to="/authentication?type=detailsPage" className="link-style">
-                                    <Favorite />
-                                </Link>
+
+                                {isAuthenticated ? (
+                                    <Favorite itemId={id} itemType={'event'} itemName={title} favoritedBool={isFavorited}/>
+                                ) : (
+                                    <Link to="/authentication?type=detailsPage" className="link-style">
+                                        <Favorite />
+                                    </Link>
+                                )}
+
                             </div>
                         </div>
                     </div>

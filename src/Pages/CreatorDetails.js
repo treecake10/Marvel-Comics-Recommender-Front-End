@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { checkIfItemLiked } from '../Components/State/Auth/Action';
+import { checkIfItemLiked, checkIfItemFavorited } from '../Components/State/Auth/Action';
 import { fetchCreatorById, fetchSeriesByCreatorId, fetchEventsByCreatorId } from "../libs/utils";
 import ConcurrentDataFetcher from "../Components/DataTools/ConcurrentDataFetcher";
 import DataList from "../Components/DataList";
@@ -9,12 +9,15 @@ import Like from "../Components/Icons/Like";
 import Favorite from "../Components/Icons/Favorite";
 
 const CreatorDetails = ({ isAuthenticated }) => {
-    const { id } = useParams();
-    const [creator, setCreator] = useState(null);
 
+    const { id } = useParams();
+    const dispatch = useDispatch();
     const jwt = localStorage.getItem("jwt");
-    const dispatchCheckLikedItem = useDispatch();
+
     const isLiked = useSelector(state => state.auth.isLiked);
+    const isFavorited = useSelector(state => state.auth.isFavorited);
+
+    const [creator, setCreator] = useState(null);
 
     const [data, setData] = useState({
         series: [],
@@ -58,9 +61,10 @@ const CreatorDetails = ({ isAuthenticated }) => {
 
     useEffect(() => {
 
-        dispatchCheckLikedItem(checkIfItemLiked(id, 'creator', jwt));
+        dispatch(checkIfItemLiked(id, 'creator', jwt));
+        dispatch(checkIfItemFavorited(id, 'creator', jwt));
      
-     }, [dispatchCheckLikedItem, id, jwt])
+     }, [dispatch, id, jwt])
 
     useEffect(() => {
         fetchListData(fetchEventsByCreatorId, 'events');
@@ -86,6 +90,7 @@ const CreatorDetails = ({ isAuthenticated }) => {
                             </div>
                             <br />
                             <div className="contents__arrangement">
+
                                 {isAuthenticated ? (
                                     <Like itemId={id} itemType={'creator'} itemName={fullName} likedBool={isLiked}/>
                                 ) : (
@@ -93,10 +98,17 @@ const CreatorDetails = ({ isAuthenticated }) => {
                                         <Like />
                                     </Link>
                                 )}
+
                                 <div className="middle-column-spacing"></div>
-                                <Link to="/authentication?type=detailsPage" className="link-style">
-                                    <Favorite />
-                                </Link>
+
+                                {isAuthenticated ? (
+                                    <Favorite itemId={id} itemType={'creator'} itemName={fullName} favoritedBool={isFavorited}/>
+                                ) : (
+                                    <Link to="/authentication?type=detailsPage" className="link-style">
+                                        <Favorite />
+                                    </Link>
+                                )}
+
                             </div>
                         </div>
                     </div>
