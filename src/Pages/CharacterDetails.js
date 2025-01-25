@@ -33,8 +33,8 @@ const CharacterDetails = ({ isAuthenticated }) => {
 
     useEffect(() => {
 
-        dispatch(checkIfItemLiked(id, 'character', jwt));
-        dispatch(checkIfItemFavorited(id, 'character', jwt));
+        dispatch(checkIfItemLiked(id, 'character', 'LIKED', jwt));
+        dispatch(checkIfItemFavorited(id, 'character', 'FAVORITED', jwt));
 
     }, [dispatch, id, jwt])
 
@@ -59,7 +59,7 @@ const CharacterDetails = ({ isAuthenticated }) => {
                         <div className="right-side">
 
                             {isAuthenticated ? (
-                                <Like itemId={id} itemType={'character'} itemName={character.name} likedBool={isLiked}/>
+                                <Like itemId={id} itemType={'character'} itemName={character.name} actionType={'LIKED'} likedBool={isLiked}/>
                             ) : (
                                 <Link to="/authentication?type=detailsPage" className="link-style">
                                     <Like />
@@ -69,7 +69,7 @@ const CharacterDetails = ({ isAuthenticated }) => {
                             <div className="middle-column-spacing"></div>
 
                             {isAuthenticated ? (
-                                <Favorite itemId={id} itemType={'character'} itemName={character.name} favoritedBool={isFavorited}/>
+                                <Favorite itemId={id} itemType={'character'} itemName={character.name} actionType={'FAVORITED'} favoritedBool={isFavorited}/>
                             ) : (
                                 <Link to="/authentication?type=detailsPage" className="link-style">
                                     <Favorite/>

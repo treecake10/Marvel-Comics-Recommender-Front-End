@@ -29,6 +29,7 @@ const Header = ({ isAuthenticated }) => {
             <nav className="navigation">
                 <ul>
                     <li><Link to="/explore">Explore</Link></li>
+                    <li><Link to="/recommend">Recommend</Link></li>
                     <li><a href="/">Battle Simulator</a></li>
                     <li><a href="/">About</a></li>
                     <li><a href="/">Contact</a></li>

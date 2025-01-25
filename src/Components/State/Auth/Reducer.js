@@ -5,13 +5,12 @@ import {
     REGISTER_REQUEST, 
     REGISTER_SUCCESS,
     LOGOUT, 
+    ADD_TO_BOOKMARKED_SERIES_SUCCESS,
     ADD_TO_LIKED_CHARACTERS_SUCCESS, 
-    ADD_TO_LIKED_SERIES_SUCCESS,
     ADD_TO_LIKED_EVENTS_SUCCESS,
     ADD_TO_LIKED_CREATORS_SUCCESS,
     ADD_TO_LIKED_COMICS_SUCCESS,
     ADD_TO_FAVORITED_CHARACTERS_SUCCESS, 
-    ADD_TO_FAVORITED_SERIES_SUCCESS,
     ADD_TO_FAVORITED_EVENTS_SUCCESS,
     ADD_TO_FAVORITED_CREATORS_SUCCESS,
     ADD_TO_FAVORITED_COMICS_SUCCESS,
@@ -24,17 +23,24 @@ import {
     CHECK_ITEM_FAVORITED_SUCCESS, 
     CHECK_ITEM_FAVORITED_FAILURE,
     UNFAVORITE_ITEM_SUCCESS, 
-    UNFAVORITE_ITEM_FAILURE
+    UNFAVORITE_ITEM_FAILURE,
+    CHECK_ITEM_BOOKMARKED_REQUEST,
+    CHECK_ITEM_BOOKMARKED_SUCCESS,
+    CHECK_ITEM_BOOKMARKED_FAILURE,
+    UNBOOKMARK_ITEM_SUCCESS,
+    UNBOOKMARK_ITEM_FAILURE,
+    GET_BOOKMARKED_ITEMS_REQUEST,
+    GET_BOOKMARKED_ITEMS_SUCCESS,
+    GET_BOOKMARKED_ITEMS_FAILURE
 } from "./ActionType";
 
 import { 
+    isPresentInSeriesBookmarks,
     isPresentInCharacterLikes, 
-    isPresentInSeriesLikes,
     isPresentInEventLikes,
     isPresentInCreatorLikes,
     isPresentInComicLikes,
     isPresentInCharacterFavorites,
-    isPresentInSeriesFavorites,
     isPresentInEventFavorites,
     isPresentInCreatorFavorites,
     isPresentInComicFavorites
@@ -45,20 +51,23 @@ const initialState={
     isLoading: false,
     isLiked: false,
     isFavorited: false,
+    isBookmarked: false,
     error: null,
     jwt: null,
     likes: [],
     favorites: [],
+    bookmarks: [],
+    bookmarkedItems: [],
     success: null
 }
 
-const updateLikesOrFaves = (state, payload, isPresentFunc) => ({
+const updateLikesFavesMarks = (state, payload, isPresentFunc) => ({
     ...state,
     isLoading: false,
     error: null,
-    likesOrFaves: isPresentFunc(state.likesOrFaves, payload)
-      ? state.likesOrFaves.filter((item) => item.id !== payload.id)
-      : [payload, ...state.likesOrFaves],
+    likesFavesMarks: isPresentFunc(state.likesFavesMarks, payload)
+      ? state.likesFavesMarks.filter((item) => item.id !== payload.id)
+      : [payload, ...state.likesFavesMarks],
   });
   
   export const authReducer = (state = initialState, action) => {
@@ -71,21 +80,21 @@ const updateLikesOrFaves = (state, payload, isPresentFunc) => ({
       case REGISTER_SUCCESS:
       case LOGIN_SUCCESS:
         return { ...state, isLoading: false, jwt: action.payload, success: 'Login Successful' };
+
+      case ADD_TO_BOOKMARKED_SERIES_SUCCESS:
+        return updateLikesFavesMarks(state, action.payload, isPresentInSeriesBookmarks);
   
       case ADD_TO_LIKED_CHARACTERS_SUCCESS:
-        return updateLikesOrFaves(state, action.payload, isPresentInCharacterLikes);
-  
-      case ADD_TO_LIKED_SERIES_SUCCESS:
-        return updateLikesOrFaves(state, action.payload, isPresentInSeriesLikes);
+        return updateLikesFavesMarks(state, action.payload, isPresentInCharacterLikes);
   
       case ADD_TO_LIKED_EVENTS_SUCCESS:
-        return updateLikesOrFaves(state, action.payload, isPresentInEventLikes);
+        return updateLikesFavesMarks(state, action.payload, isPresentInEventLikes);
   
       case ADD_TO_LIKED_CREATORS_SUCCESS:
-        return updateLikesOrFaves(state, action.payload, isPresentInCreatorLikes);
+        return updateLikesFavesMarks(state, action.payload, isPresentInCreatorLikes);
   
       case ADD_TO_LIKED_COMICS_SUCCESS:
-        return updateLikesOrFaves(state, action.payload, isPresentInComicLikes);
+        return updateLikesFavesMarks(state, action.payload, isPresentInComicLikes);
   
       case CHECK_ITEM_LIKED_REQUEST:
         return { ...state, isLoading: true, error: null };
@@ -103,19 +112,16 @@ const updateLikesOrFaves = (state, payload, isPresentFunc) => ({
         return { ...state, error: action.payload };
 
       case ADD_TO_FAVORITED_CHARACTERS_SUCCESS:
-        return updateLikesOrFaves(state, action.payload, isPresentInCharacterFavorites);
-      
-      case ADD_TO_FAVORITED_SERIES_SUCCESS:
-        return updateLikesOrFaves(state, action.payload, isPresentInSeriesFavorites);
+        return updateLikesFavesMarks(state, action.payload, isPresentInCharacterFavorites);
       
       case ADD_TO_FAVORITED_EVENTS_SUCCESS:
-        return updateLikesOrFaves(state, action.payload, isPresentInEventFavorites);
+        return updateLikesFavesMarks(state, action.payload, isPresentInEventFavorites);
       
       case ADD_TO_FAVORITED_CREATORS_SUCCESS:
-        return updateLikesOrFaves(state, action.payload, isPresentInCreatorFavorites);
+        return updateLikesFavesMarks(state, action.payload, isPresentInCreatorFavorites);
       
       case ADD_TO_FAVORITED_COMICS_SUCCESS:
-        return updateLikesOrFaves(state, action.payload, isPresentInComicFavorites);
+        return updateLikesFavesMarks(state, action.payload, isPresentInComicFavorites);
       
       case CHECK_ITEM_FAVORITED_REQUEST:
         return { ...state, isLoading: true, error: null };
@@ -131,7 +137,34 @@ const updateLikesOrFaves = (state, payload, isPresentFunc) => ({
       
       case UNFAVORITE_ITEM_FAILURE:
         return { ...state, error: action.payload };
+
+      case ADD_TO_BOOKMARKED_SERIES_SUCCESS:
+        return updateLikesFavesMarks(state, action.payload, isPresentInSeriesBookmarks);
       
+      case CHECK_ITEM_BOOKMARKED_REQUEST:
+        return { ...state, isLoading: true, error: null };
+      
+      case CHECK_ITEM_BOOKMARKED_SUCCESS:
+        return { ...state, isLoading: false, isBookmarked: action.payload };
+      
+      case CHECK_ITEM_BOOKMARKED_FAILURE:
+        return { ...state, isLoading: false, error: action.payload };
+      
+      case UNBOOKMARK_ITEM_SUCCESS:
+        return { ...state, isBookmarked: false, bookmarks: state.bookmarks.filter(item => item.id !== action.payload) };
+      
+      case UNBOOKMARK_ITEM_FAILURE:
+        return { ...state, error: action.payload };
+
+      case GET_BOOKMARKED_ITEMS_REQUEST:
+        return { ...state, isLoading: true, error: null };
+
+      case GET_BOOKMARKED_ITEMS_SUCCESS:
+        return { ...state, isLoading: false, bookmarkedItems: action.payload };
+
+      case GET_BOOKMARKED_ITEMS_FAILURE:
+        return { ...state, isLoading: false, error: action.payload };
+
       case LOGOUT:
         return initialState;
   

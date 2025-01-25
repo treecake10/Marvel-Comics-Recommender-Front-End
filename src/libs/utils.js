@@ -190,7 +190,7 @@ const fetchSeriesByTitle = async (title, offset) => {
   let limit = 100
   let hash = getHash(timeStamp, privateKey, apiKey)
 
-  let url = `${seriesUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&limit=${limit}&offset=${offset}&titleStartsWith=${title}`;
+  let url = `${seriesUrl}?ts=${timeStamp}&apikey=${apiKey}&hash=${hash}&limit=${limit}&offset=${offset}&title=${title}`;
 
   try {
     let response = await fetch(url);

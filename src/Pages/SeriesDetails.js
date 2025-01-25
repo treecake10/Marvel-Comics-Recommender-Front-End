@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useReducer } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { checkIfItemLiked, checkIfItemFavorited } from '../Components/State/Auth/Action';
+import { checkIfItemBookmarked } from '../Components/State/Auth/Action';
 import {
   fetchSeriesById,
   fetchComicsBySeriesId,
@@ -11,8 +11,7 @@ import {
 } from '../libs/utils';
 import ConcurrentDataFetcher from '../Components/DataTools/ConcurrentDataFetcher';
 import DataList from '../Components/DataList';
-import Like from '../Components/Icons/Like';
-import Favorite from '../Components/Icons/Favorite';
+import Bookmark from '../Components/Icons/Bookmark';
 
 // Action types
 const SET_LIST = 'SET_LIST';
@@ -49,8 +48,7 @@ const SeriesDetails = ({ isAuthenticated }) => {
   const dispatchCheckItem = useDispatch();
   const jwt = localStorage.getItem("jwt");
 
-  const isLiked = useSelector(state => state.auth.isLiked);
-  const isFavorited = useSelector(state => state.auth.isFavorited);
+  const isBookmarked = useSelector(state => state.auth.isBookmarked);
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const { comics, characters, events, creators, loadings } = state;
@@ -72,8 +70,7 @@ const SeriesDetails = ({ isAuthenticated }) => {
 
   useEffect(() => {
 
-    dispatchCheckItem(checkIfItemLiked(id, 'series', jwt));
-    dispatchCheckItem(checkIfItemFavorited(id, 'series', jwt));
+    dispatchCheckItem(checkIfItemBookmarked(id, 'series', jwt));
 
   }, [dispatchCheckItem, id, jwt])
 
@@ -81,6 +78,7 @@ const SeriesDetails = ({ isAuthenticated }) => {
     const fetchSeriesDetails = async () => {
       try {
         const seriesData = await fetchSeriesById(id);
+        console.log(seriesData[0]);
         dispatch({ type: SET_LIST, listType: 'series', result: seriesData[0] });
       } catch (error) {
         console.error(error);
@@ -100,6 +98,41 @@ const SeriesDetails = ({ isAuthenticated }) => {
     }
   }, [state.series]);
 
+  console.log(characters);
+
+  const charactersArray = useMemo(() => {
+    if (!characters) return [];
+    return characters.map((ch) => ({
+      itemId: ch.id,
+      itemType: 'character',
+      itemName: ch.name
+    }));
+  }, [characters]);
+
+  const creatorsArray = useMemo(() => {
+    if (!creators) return [];
+    return creators.map((cr) => ({
+      itemId: cr.id,
+      itemType: 'creator',
+      firstName: cr.firstName,
+      middleName: cr.middleName,
+      lastName: cr.lastName
+    }));
+  }, [creators]);
+
+  const eventsArray = useMemo(() => {
+    if (!events) return [];
+    return events.map((ev) => ({
+      itemId: ev.id,
+      itemType: 'event',
+      itemName: ev.title
+    }));
+  }, [events]);
+
+  const otherItemsArray = useMemo(() => {
+    return [...charactersArray, ...eventsArray, ...creatorsArray];
+  }, [charactersArray, eventsArray, creatorsArray]);
+
   // Memoize the reversedComics array to avoid recomputing it on each render
   const reversedComics = useMemo(() => (comics ? [...comics].reverse() : null), [comics]);
   const memoizedCreators = useMemo(() => creators, [creators]);
@@ -109,6 +142,8 @@ const SeriesDetails = ({ isAuthenticated }) => {
   if (!state.series) return null;
 
   const { thumbnail, title, description } = state.series;
+
+  console.log('Other items Array:', otherItemsArray);
 
   return (
     <div className="home">
@@ -128,22 +163,19 @@ const SeriesDetails = ({ isAuthenticated }) => {
               <div className="contents__arrangement">
                 
                 {isAuthenticated ? (
-                    <Like itemId={id} itemType={'series'} itemName={title} likedBool={isLiked}/>
+                    <Bookmark 
+                      itemId={id} 
+                      itemType={'series'} 
+                      itemName={title} 
+                      bookmarkedBool={isBookmarked} 
+                    />
                 ) : (
                     <Link to="/authentication?type=detailsPage" className="link-style">
-                        <Like />
+                        <Bookmark />
                     </Link>
                 )}
 
                 <div className="middle-column-spacing"></div>
-
-                {isAuthenticated ? (
-                    <Favorite itemId={id} itemType={'series'} itemName={title} favoritedBool={isFavorited}/>
-                ) : (
-                    <Link to="/authentication?type=detailsPage" className="link-style">
-                        <Favorite />
-                    </Link>
-                )}
 
               </div>
             </div>

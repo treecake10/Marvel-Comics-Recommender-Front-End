@@ -6,14 +6,13 @@ import { useDispatch } from 'react-redux';
 
 import { 
     addToCharacterFavorites, 
-    addToSeriesFavorites, 
     addToEventFavorites, 
     addToCreatorFavorites, 
     addToComicFavorites, 
     unfavoriteItem 
 } from '../State/Auth/Action'
 
-const Favorite = ({ itemId, itemType, itemName, favoritedBool }) => {
+const Favorite = ({ itemId, itemType, itemName, actionType, favoritedBool }) => {
 
     const [isFavorited, setFavorited] = useState(favoritedBool);
     const dispatch = useDispatch()
@@ -25,21 +24,22 @@ const Favorite = ({ itemId, itemType, itemName, favoritedBool }) => {
 
         if (isFavorited) {
 
-            dispatch(unfavoriteItem({itemId, itemType, jwt}));
+            dispatch(unfavoriteItem({itemId, itemType, actionType, jwt}));
             
         } else {
             switch (itemType) {
                 case 'character':
-                    dispatch(addToCharacterFavorites({itemId, itemType, itemName, jwt}));
+                    dispatch(addToCharacterFavorites({itemId, itemType, itemName, actionType, jwt}));
                     break;
-                case 'series':
-                    dispatch(addToSeriesFavorites({itemId, itemType, itemName, jwt}));
                 case 'event':
-                    dispatch(addToEventFavorites({itemId, itemType, itemName, jwt}));
+                    dispatch(addToEventFavorites({itemId, itemType, itemName, actionType, jwt}));
+                    break;
                 case 'creator':
-                    dispatch(addToCreatorFavorites({itemId, itemType, itemName, jwt}));
+                    dispatch(addToCreatorFavorites({itemId, itemType, itemName, actionType, jwt}));
+                    break;
                 case 'comic':
-                    dispatch(addToComicFavorites({itemId, itemType, itemName, jwt}));
+                    dispatch(addToComicFavorites({itemId, itemType, itemName, actionType, jwt}));
+                    break;
                 default:
                     console.error(`Unknown item type: ${itemType}`);
             }
@@ -51,15 +51,12 @@ const Favorite = ({ itemId, itemType, itemName, favoritedBool }) => {
 
     return(
         <div className="icon-container">
-
-            <div className="icons">
-                <div className={`icon-container ${isFavorited ? 'clickedStar' : ''}`} onClick={handleFavoriteIconClick}>
-                    {isFavorited ? (
-                        <FontAwesomeIcon icon={solidStar} />
-                    ) : (
-                        <FontAwesomeIcon icon={faStar} />
-                    )}
-                </div>
+            <div className={`icon-wrapper ${isFavorited ? 'clickedStar' : ''}`} onClick={handleFavoriteIconClick}>
+                {isFavorited ? (
+                    <FontAwesomeIcon icon={solidStar} />
+                ) : (
+                    <FontAwesomeIcon icon={faStar} />
+                )}
             </div>
 
             <div className="icon-text">

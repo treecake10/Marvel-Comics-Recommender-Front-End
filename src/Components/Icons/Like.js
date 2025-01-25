@@ -5,15 +5,14 @@ import { faHeart as solidHeart} from '@fortawesome/free-solid-svg-icons';
 import { useDispatch } from 'react-redux';
 
 import { 
-    addToCharacterLikes, 
-    addToSeriesLikes, 
+    addToCharacterLikes,  
     addToEventLikes, 
     addToCreatorLikes, 
     addToComicLikes, 
     unlikeItem 
 } from '../State/Auth/Action'
 
-const Like = ({ itemId, itemType, itemName, likedBool }) => {
+const Like = ({ itemId, itemType, itemName, actionType, likedBool }) => {
 
     const [isLiked, setLiked] = useState(likedBool);
     const dispatch = useDispatch()
@@ -25,21 +24,22 @@ const Like = ({ itemId, itemType, itemName, likedBool }) => {
 
         if (isLiked) {
 
-            dispatch(unlikeItem({itemId, itemType, jwt}));
+            dispatch(unlikeItem({itemId, itemType, actionType, jwt}));
             
         } else {
             switch (itemType) {
                 case 'character':
-                    dispatch(addToCharacterLikes({itemId, itemType, itemName, jwt}));
+                    dispatch(addToCharacterLikes({itemId, itemType, itemName, actionType, jwt}));
                     break;
-                case 'series':
-                    dispatch(addToSeriesLikes({itemId, itemType, itemName, jwt}));
                 case 'event':
-                    dispatch(addToEventLikes({itemId, itemType, itemName, jwt}));
+                    dispatch(addToEventLikes({itemId, itemType, itemName, actionType, jwt}));
+                    break;
                 case 'creator':
-                    dispatch(addToCreatorLikes({itemId, itemType, itemName, jwt}));
+                    dispatch(addToCreatorLikes({itemId, itemType, itemName, actionType, jwt}));
+                    break;
                 case 'comic':
-                    dispatch(addToComicLikes({itemId, itemType, itemName, jwt}));
+                    dispatch(addToComicLikes({itemId, itemType, itemName, actionType, jwt}));
+                    break;
                 default:
                     console.error(`Unknown item type: ${itemType}`);
             }
@@ -51,14 +51,12 @@ const Like = ({ itemId, itemType, itemName, likedBool }) => {
 
     return(
         <div className="icon-container">
-            <div className="icons">
-                <div className={`icon-container ${isLiked ? 'clickedHeart' : ''}`} onClick={handleLikeIconClick}>
-                    {isLiked ? (
-                        <FontAwesomeIcon icon={solidHeart} />
-                    ) : (
-                        <FontAwesomeIcon icon={faHeart} />
-                    )}
-                </div>
+            <div className={`icon-wrapper ${isLiked ? 'clickedHeart' : ''}`} onClick={handleLikeIconClick}>
+                {isLiked ? (
+                    <FontAwesomeIcon icon={solidHeart} />
+                ) : (
+                    <FontAwesomeIcon icon={faHeart} />
+                )}
             </div>
 
             <div className="icon-text">
